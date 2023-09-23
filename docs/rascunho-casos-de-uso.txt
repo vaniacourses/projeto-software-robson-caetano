@@ -5,6 +5,7 @@
 - médico
 - paciente
 - gerente de estoque
+- operadora de plano
 
 # entidades adicionais
 
@@ -17,3 +18,6 @@
 - secretaria cadastra paciente
 - gerente de estoque cadastra produtos
 - gerente de estoque distribui produtos em salas
+- secretaria agenda consulta
+- médico realiza consulta
+- médico utiliza produtos em consulta
