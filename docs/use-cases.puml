@@ -1,10 +1,36 @@
 @startuml
 
-actor secretaria
-actor "gerente de estoque"
+skinparam actorStyle awesome
 
-(cadastra usuários)
-(cadastra paciente)
-"gerente de estoque" --> (cadastra produtos)
+"Administrador do sistema" as admin
+Secretaria as secretaria
+Médico as medico
+"Gerente de estoque" as gerente
+"Operadora de plano de saúde" as operadora
+
+"Cadastra usuários" as (cadastra usuarios)
+"Cadastra salas" as (cadastra salas)
+
+"Cadastra produtos" as (cadastra produtos)
+"Distribui produtos em salas" as (distribui produtos)
+"Cadastra paciente" as (cadastra paciente)
+"Agenda consulta" as (agenda consulta)
+"Realiza consulta" as (realiza consulta)
+"Utiliza produtos em consulta" as (usa produtos)
+"Paga consulta ao hospital" as (paga consulta)
+
+admin --> (cadastra usuarios)
+admin --> (cadastra salas)
+
+gerente --> (cadastra produtos)
+gerente --> (distribui produtos)
+
+secretaria --> (cadastra paciente)
+secretaria --> (agenda consulta)
+
+medico --> (realiza consulta) 
+medico --> (usa produtos)
+
+operadora --> (paga consulta)
 
 @enduml
