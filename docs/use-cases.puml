@@ -1,0 +1,10 @@
+@startuml
+
+actor secretaria
+actor "gerente de estoque"
+
+(cadastra usuários)
+(cadastra paciente)
+"gerente de estoque" --> (cadastra produtos)
+
+@enduml
