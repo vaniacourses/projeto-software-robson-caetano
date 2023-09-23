@@ -1,7 +1,7 @@
 # atores
 
+- admin
 - secretaria
-- administrador da plataforma
 - médico
 - paciente
 - gerente de estoque
@@ -15,9 +15,13 @@
 # casos de uso
 
 - admin cadastra usuários (administrador, secretaria, gerente de estoque, médico)
-- secretaria cadastra paciente
+- admin cadastra salas
+
 - gerente de estoque cadastra produtos
 - gerente de estoque distribui produtos em salas
+
+- secretaria cadastra paciente
 - secretaria agenda consulta
+
 - médico realiza consulta
 - médico utiliza produtos em consulta
