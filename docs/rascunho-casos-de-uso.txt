@@ -1,0 +1,19 @@
+# atores
+
+- secretaria
+- administrador da plataforma
+- médico
+- paciente
+- gerente de estoque
+
+# entidades adicionais
+
+- produtos
+- salas
+
+# casos de uso
+
+- admin cadastra usuários (administrador, secretaria, gerente de estoque, médico)
+- secretaria cadastra paciente
+- gerente de estoque cadastra produtos
+- gerente de estoque distribui produtos em salas
