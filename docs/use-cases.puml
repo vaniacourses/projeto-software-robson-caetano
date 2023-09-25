@@ -7,6 +7,7 @@ Secretaria as secretaria
 Médico as medico
 "Gerente de estoque" as gerente
 "Operadora de plano de saúde" as operadora
+"Usuário" as usuario
 
 "Cadastra usuários" as (cadastra usuarios)
 "Cadastra salas" as (cadastra salas)
@@ -18,19 +19,37 @@ Médico as medico
 "Realiza consulta" as (realiza consulta)
 "Utiliza produtos em consulta" as (usa produtos)
 "Paga consulta ao hospital" as (paga consulta)
+"Faz login na aplicação" as (login)
 
-admin --> (cadastra usuarios)
-admin --> (cadastra salas)
+usuario <|-- admin
+usuario <|-- secretaria
+usuario <|-- medico
+usuario <|-- gerente
+usuario <|-- operadora
 
-gerente --> (cadastra produtos)
-gerente --> (distribui produtos)
+usuario -up-> (login)
 
-secretaria --> (cadastra paciente)
-secretaria --> (agenda consulta)
+admin -up-> (cadastra usuarios)
+admin -up-> (cadastra salas)
+(cadastra usuarios) .up.> (login) : include
+(cadastra salas) .up.> (login) : include
 
-medico --> (realiza consulta) 
-medico --> (usa produtos)
+gerente -up-> (cadastra produtos)
+gerente -up-> (distribui produtos)
+(cadastra produtos) .up.> (login) : include
+(distribui produtos) .up.> (login) : include
 
-operadora --> (paga consulta)
+secretaria -up-> (cadastra paciente)
+secretaria -up-> (agenda consulta)
+(cadastra paciente) .up.> (login) : include
+(agenda consulta) .up.> (login) : include
+
+medico -up-> (realiza consulta) 
+medico -up-> (usa produtos)
+(realiza consulta) .up.> (login) : include
+(usa produtos) .up.> (login) : include
+
+operadora -up-> (paga consulta)
+(paga consulta) .up.> (login) : include
 
 @enduml
