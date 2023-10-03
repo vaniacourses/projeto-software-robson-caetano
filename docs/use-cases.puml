@@ -6,7 +6,6 @@ skinparam actorStyle awesome
 Secretaria as secretaria
 Médico as medico
 "Gerente de estoque" as gerente
-"Operadora de plano de saúde" as operadora
 "Usuário" as usuario
 
 "Cadastra usuários" as (cadastra usuarios)
@@ -18,14 +17,12 @@ Médico as medico
 "Agenda consulta" as (agenda consulta)
 "Realiza consulta" as (realiza consulta)
 "Utiliza produtos em consulta" as (usa produtos)
-"Paga consulta ao hospital" as (paga consulta)
 "Faz login na aplicação" as (login)
 
 usuario <|-- admin
 usuario <|-- secretaria
 usuario <|-- medico
 usuario <|-- gerente
-usuario <|-- operadora
 
 usuario -up-> (login)
 
@@ -48,8 +45,5 @@ medico -up-> (realiza consulta)
 medico -up-> (usa produtos)
 (realiza consulta) .up.> (login) : include
 (usa produtos) .up.> (login) : include
-
-operadora -up-> (paga consulta)
-(paga consulta) .up.> (login) : include
 
 @enduml
