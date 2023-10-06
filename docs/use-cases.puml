@@ -2,21 +2,32 @@
 
 skinparam actorStyle awesome
 
+note as N1
+  Todos casos de uso herdam do caso de uso "Faz login na aplicação",
+  porém omitimos as setas para melhorar a legibilidade do diagrama
+end note
+
 "Administrador do sistema" as admin
-Secretaria as secretaria
-Médico as medico
+"Secretaria " as secretaria
+"Médico" as medico
 "Gerente de estoque" as gerente
 "Usuário" as usuario
 
-"Cadastra usuários" as (cadastra usuarios)
-"Cadastra salas" as (cadastra salas)
+"CRUD usuários do sistema" as (crud usuario)
 
-"Cadastra produtos" as (cadastra produtos)
+"CRUD salas do hospital" as (crud salas)
+
+"Cadastra novos produtos no estoque" as (cadastra produtos)
 "Distribui produtos em salas" as (distribui produtos)
-"Cadastra paciente" as (cadastra paciente)
-"Agenda consulta" as (agenda consulta)
-"Realiza consulta" as (realiza consulta)
-"Utiliza produtos em consulta" as (usa produtos)
+
+"CRUD pacientes" as (crud pacientes)
+
+"Agenda consulta com um paciente" as (agenda consulta)
+
+"Abre uma consulta" as (abre consulta)
+"Consome produtos em consulta" as (consome produtos)
+"Encerra uma consulta" as (encerra consulta)
+
 "Faz login na aplicação" as (login)
 
 usuario <|-- admin
@@ -24,26 +35,20 @@ usuario <|-- secretaria
 usuario <|-- medico
 usuario <|-- gerente
 
-usuario -up-> (login)
+usuario -down-> (login)
 
-admin -up-> (cadastra usuarios)
-admin -up-> (cadastra salas)
-(cadastra usuarios) .up.> (login) : include
-(cadastra salas) .up.> (login) : include
+admin -down-> (crud usuario)
 
-gerente -up-> (cadastra produtos)
-gerente -up-> (distribui produtos)
-(cadastra produtos) .up.> (login) : include
-(distribui produtos) .up.> (login) : include
+admin -down-> (crud salas)
 
-secretaria -up-> (cadastra paciente)
-secretaria -up-> (agenda consulta)
-(cadastra paciente) .up.> (login) : include
-(agenda consulta) .up.> (login) : include
+gerente -down-> (cadastra produtos)
+gerente -down-> (distribui produtos)
 
-medico -up-> (realiza consulta) 
-medico -up-> (usa produtos)
-(realiza consulta) .up.> (login) : include
-(usa produtos) .up.> (login) : include
+secretaria -down-> (agenda consulta)
+secretaria -down-> (crud pacientes)
+
+medico -down-> (abre consulta) 
+medico -down-> (consome produtos)
+medico -down-> (encerra consulta) 
 
 @enduml
