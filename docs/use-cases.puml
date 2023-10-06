@@ -3,20 +3,26 @@
 skinparam actorStyle awesome
 
 "Administrador do sistema" as admin
-Secretaria as secretaria
-Médico as medico
+"Secretaria " as secretaria
+"Médico" as medico
 "Gerente de estoque" as gerente
 "Usuário" as usuario
 
-"Cadastra usuários" as (cadastra usuarios)
-"Cadastra salas" as (cadastra salas)
+"CRUD usuários do sistema" as (crud usuario)
 
-"Cadastra produtos" as (cadastra produtos)
+"CRUD salas do hospital" as (crud salas)
+
+"Cadastra novos produtos no estoque" as (cadastra produtos)
 "Distribui produtos em salas" as (distribui produtos)
-"Cadastra paciente" as (cadastra paciente)
-"Agenda consulta" as (agenda consulta)
-"Realiza consulta" as (realiza consulta)
-"Utiliza produtos em consulta" as (usa produtos)
+
+"CRUD pacientes" as (crud pacientes)
+
+"Agenda consulta com um paciente" as (agenda consulta)
+
+"Abre uma consulta" as (abre consulta)
+"Consome produtos em consulta" as (consome produtos)
+"Encerra uma consulta" as (encerra consulta)
+
 "Faz login na aplicação" as (login)
 
 usuario <|-- admin
@@ -26,24 +32,27 @@ usuario <|-- gerente
 
 usuario -up-> (login)
 
-admin -up-> (cadastra usuarios)
-admin -up-> (cadastra salas)
-(cadastra usuarios) .up.> (login) : include
-(cadastra salas) .up.> (login) : include
+admin -up-> (crud usuario)
+(crud usuario) .up.> (login) : include
+
+admin -up-> (crud salas)
+(crud salas) .up.> (login) : include
 
 gerente -up-> (cadastra produtos)
 gerente -up-> (distribui produtos)
 (cadastra produtos) .up.> (login) : include
 (distribui produtos) .up.> (login) : include
 
-secretaria -up-> (cadastra paciente)
 secretaria -up-> (agenda consulta)
-(cadastra paciente) .up.> (login) : include
+secretaria -up-> (crud pacientes)
 (agenda consulta) .up.> (login) : include
+(crud pacientes) .up.> (login) : include
 
-medico -up-> (realiza consulta) 
-medico -up-> (usa produtos)
-(realiza consulta) .up.> (login) : include
-(usa produtos) .up.> (login) : include
+medico -up-> (abre consulta) 
+medico -up-> (consome produtos)
+medico -up-> (encerra consulta) 
+(abre consulta) .up.> (login) : include
+(consome produtos) .up.> (login) : include
+(encerra consulta) .up.> (login) : include
 
 @enduml
