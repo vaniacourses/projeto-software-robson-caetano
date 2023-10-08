@@ -1,0 +1,28 @@
+@startuml
+skinparam participantPadding 20
+skinparam boxPadding 10
+
+title "Cadastrar usuários" 
+
+box #LightBlue
+participant "Administrador" as A
+participant "Frontend" as F
+participant "Backend" as B
+database "Banco de Dados" as DB
+
+
+A -> F: Acessa a tela de cadastro de usuários
+activate F
+F -> B: Envia dados preenchidos do usuários
+activate B
+B -> DB: Salva os dados do usuário
+activate DB
+DB --> B: Retorna o usuário cadastrado
+deactivate DB
+B --> F: Envia a confirmação do usuário cadastrado
+deactivate B
+F --> A: Mostra uma mensagem de usuário cadastrado com sucesso.
+deactivate F
+
+
+@enduml
