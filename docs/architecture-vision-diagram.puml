@@ -1,0 +1,23 @@
+@startuml
+
+title Visão - Arquitetura Monolítica com Cliente/Servidor e Backend MVC
+
+package "Aplicação" {
+  left to right direction
+
+  package "Cliente" {
+    [Cliente web] as web
+  }
+
+  package "Servidor" {
+    [Backend MVC] as back
+
+    [Banco de dados] as db
+  }
+
+  web --> back
+
+  back --> db
+}
+
+@enduml
