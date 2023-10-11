@@ -1,0 +1,57 @@
+@startuml
+skinparam participantPadding 20
+skinparam boxPadding 10
+
+title "Agenda consulta com paciente" 
+
+box #LightBlue
+participant "Secretaria" as S
+participant "Frontend" as F
+participant "Backend" as B
+database "Banco de Dados" as DB
+participant "Paciente" as P
+
+note left of S
+  O processo começa
+  quando a secretaria
+  decide agendar uma consulta.
+end note
+
+S -> F: Acessa a tela de agendamento
+activate F
+F -> B: Solicita horários disponíveis
+activate B
+B -> DB: Busca horários disponíveis
+activate DB
+DB --> B: Retorna horários disponíveis
+deactivate DB
+B --> F: Envia horários disponíveis
+deactivate B
+F --> S: Mostra os horários disponíveis
+deactivate F
+S -> P: Pergunta ao paciente sobre sua disponibilidade
+activate P
+P --> S: Informa sua disponibilidade
+deactivate P
+S -> F: Escolhe um horário baseado na disponibilidade do paciente
+activate F
+F -> B: Solicita agendamento do horário escolhido
+activate B
+B -> DB: Registra agendamento
+activate DB
+DB --> B: Confirma registro do agendamento
+deactivate DB
+B --> F: Confirma agendamento ao frontend
+deactivate B
+F --> S: Mostra confirmação do agendamento
+deactivate F
+
+S --> P: Comunica confirmação do horário agendado
+
+note right of S
+  A consulta é agora
+  agendada e o paciente
+  é informado.
+end note
+
+@enduml
