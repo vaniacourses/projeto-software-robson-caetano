@@ -1,0 +1,26 @@
+@startuml
+skinparam participantPadding 20
+skinparam boxPadding 10
+
+title "Cadastra novos produtos no estoque" 
+
+box #LightBlue
+
+actor "Administrador" as admin
+participant "Frontend" as front
+participant "Backend" as back
+database "Banco de Dados" as DB
+
+admin-> front: Faz login na aplicação
+activate front
+front->back: Preenche dados do produto
+activate back
+back->DB: Salva informações no back
+activate DB
+DB-->back: Retorna produto salvo
+deactivate DB
+back-->front: Envia confirmação do cadastro do produto
+deactivate back
+front-->admin: Mostra confirmação do produto cadastrado
+deactivate front
+@enduml
