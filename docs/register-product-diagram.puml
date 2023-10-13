@@ -11,11 +11,11 @@ participant "Frontend" as front
 participant "Backend" as back
 database "Banco de Dados" as DB
 
-admin-> front: Faz login na aplicação
+admin-> front: Preenche dados do produto
 activate front
-front->back: Preenche dados do produto
+front->back: Envia para o backend
 activate back
-back->DB: Salva informações no back
+back->DB: Salva informações no banco de dados
 activate DB
 DB-->back: Retorna produto salvo
 deactivate DB
