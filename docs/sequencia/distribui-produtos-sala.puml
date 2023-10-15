@@ -1,0 +1,42 @@
+@startuml
+skinparam participantPadding 20
+skinparam boxPadding 10
+
+title "Distribui produto nas salas" 
+
+box #LightBlue
+participant "Gerente de estoque" as GE
+participant "Frontend" as F
+participant "Backend" as B
+database "Banco de Dados" as DB
+
+note left of GE
+  O processo começa
+  ao solicitar lista de produtos
+  faltando na sala
+end note
+
+GE -> F: Clica no botão solicitando lista
+activate F
+F -> B: Solicita lista de produtos faltando
+activate B
+B -> DB: Busca produtos cadastrados na sala
+activate DB
+DB --> B: Retorna produtos cadastrados na sala
+deactivate DB
+B -> DB: Busca produtos faltando no estoque
+activate DB
+DB --> B: Retorna produtos faltando no estoque
+deactivate DB
+B --> F: Envia lista de produtos faltando
+deactivate B
+F --> GE: Comunica lista de produtos faltando
+deactivate F
+
+note right of GE
+  Termina enviando uma lista
+  Informando os produtos que temos no estoque
+  E os produtos que não temos no estoque, mas precisamos
+end note
+
+@enduml
