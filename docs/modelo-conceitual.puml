@@ -1,0 +1,68 @@
+@startuml
+
+entity Administrador {
+  id: int {id}
+  nome: String
+}
+
+entity GerenteEstoque {
+  id: int {id}
+  nome: String
+}
+
+entity Secretaria {
+  id: int {id}
+  nome: String
+}
+
+entity Medico {
+  id: int {id}
+  nome: String
+}
+
+entity OperadoraPlanoDeSaude {
+  id: int {id}
+  nome: String
+}
+
+entity Produto {
+  id: int {id}
+  nome: String
+  quantidade
+  criadoPor
+}
+
+entity Consulta {
+  id: int {id}
+  horario
+}
+
+entity Sala {
+  id: int {id}
+}
+
+entity Paciente {
+  id: int {id}
+  name: String
+  documento
+  dataNascimento
+}
+
+Administrador -- "1..*" Administrador: cadastra
+Administrador -- "1..*" GerenteEstoque: cadastra
+Administrador -- "1..*" Secretaria: cadastra
+Administrador -- "1..*" Medico: cadastra
+Administrador -- "1..*" OperadoraPlanoDeSaude: cadastra
+Administrador -- "1..*" Sala: cadastra
+Secretaria -- "1..*" Paciente: cadastra
+Secretaria -- "1..*" Consulta: agenda
+Medico -- "1..*" Consulta: abre
+Medico -- "1..*" Consulta: fecha
+Medico -- "1..*" Produto: utiliza
+OperadoraPlanoDeSaude -- "1..*" Consulta: paga
+GerenteEstoque -- Produto: distribui
+GerenteEstoque -- "1..*" Produto: cadastra
+Paciente -- "1..*" Consulta
+Sala "1" -- "1" Consulta
+
+@enduml
