@@ -1,0 +1,76 @@
+@startuml
+
+class Usuario {
+  + nome: String
+  - cargo: String
+  + fazerLogin(): void
+}
+
+class Produto {
+  - nome: String
+  - quantidade: int
+  - criadoPor: String
+}
+
+class Consulta {
+  - numero: int
+  - horario: String
+}
+
+class Sala {
+  - numero: int
+}
+
+class Administrador {
+  + cadastrarUsuario(): void
+  + cadastrarSala(): void
+}
+
+class GerenteEstoque {
+  + distribuirProdutos(): void
+  + cadastrarProduto(): void
+}
+
+class Secretaria {
+  + cadastrarPaciente(): void
+  + agendarConsulta(): void
+}
+
+class Medico {
+  + abrirConsulta(): void
+  + fecharConsulta(): void
+  + utilizaProduto(produto, consulta): void
+}
+
+class OperadoraPlanoDeSaude {
+  + pagarConsulta(): void
+}
+
+entity Paciente {
+  - numero: String
+  - name: String
+  - documento: String
+  - dataNascimento: String
+}
+
+Sistema "1" --* "1..*" Usuario: possui
+
+Usuario <|-- Administrador
+Usuario <|-- GerenteEstoque
+Usuario <|-- Secretaria
+Usuario <|-- Medico
+Usuario <|-- OperadoraPlanoDeSaude
+
+GerenteEstoque --|> Produto
+Sala "1" *-- "1..*" Produto: possui
+Medico --|> Produto
+
+Medico --> Consulta: usa
+OperadoraPlanoDeSaude --> Consulta: usa
+
+Administrador --> Sala: usa
+Secretaria --> Sala: usa
+
+Paciente "1" --* "1" Consulta
+
+@enduml
