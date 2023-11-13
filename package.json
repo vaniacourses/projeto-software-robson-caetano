@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/server.ts",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register ."
   },
   "author": "",
