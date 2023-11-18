@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { UserDAO } from "~/daos/UserDAO";
 import { UserSchema } from "~/schemas/user/createUserSchema";
 
-export class UserControllerCreate {
+export class CreateUserController {
   private userDAO: UserDAO;
 
   constructor() {
