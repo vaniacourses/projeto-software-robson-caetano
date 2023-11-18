@@ -27,4 +27,7 @@ yarn install
 
 # cria as tabelas no banco de dados
 yarn migrate:dev
+
+# Rodar aplicação
+yarn dev
 ```
