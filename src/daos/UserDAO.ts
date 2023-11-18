@@ -25,4 +25,8 @@ export class UserDAO {
   public async list() {
     return this.db.user.findMany();
   }
+
+  public async update(id: number, name: string, email: string) {
+    return this.db.user.update({ where: { id }, data: { name, email } });
+  }
 }
