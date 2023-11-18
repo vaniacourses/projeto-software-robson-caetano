@@ -21,4 +21,8 @@ export class UserDAO {
   public async create(name: string, email: string) {
     return this.db.user.create({ data: { name, email } });
   }
+
+  public async list() {
+    return this.db.user.findMany();
+  }
 }
