@@ -29,4 +29,8 @@ export class UserDAO {
   public async update(id: number, name: string, email: string) {
     return this.db.user.update({ where: { id }, data: { name, email } });
   }
+
+  public async delete(id: number) {
+    return this.db.user.delete({ where: { id } });
+  }
 }

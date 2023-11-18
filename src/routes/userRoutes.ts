@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { CreateUserController } from "~/controllers/CreateUserController";
+import { DeleteUserController } from "~/controllers/DeleteUserController";
 import { ListUsersController } from "~/controllers/ListUsersController";
 import { UpdateUserController } from "~/controllers/UpdateUserController";
 
@@ -15,4 +16,8 @@ userRouter.post("/", (req, res) => {
 
 userRouter.put("/:id", (req, res) => {
   new UpdateUserController().createUser(req, res);
+});
+
+userRouter.delete("/:id", (req, res) => {
+  new DeleteUserController().deleteUser(req, res);
 });
