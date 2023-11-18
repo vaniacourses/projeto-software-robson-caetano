@@ -5,7 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register .",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register -e ts .",
     "migrate:dev": "prisma migrate dev"
   },
   "author": "",

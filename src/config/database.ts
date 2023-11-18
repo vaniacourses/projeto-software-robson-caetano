@@ -7,7 +7,6 @@ export class DatabaseClient {
 
   static getClient(): PrismaClient {
     if (!this.client) {
-      console.log("instantiated");
       this.client = new PrismaClient();
     }
 
