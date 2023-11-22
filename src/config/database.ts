@@ -14,4 +14,4 @@ export class DatabaseClient {
   }
 }
 
-export type DatabseInstance = PrismaClient;
+export type DatabaseInstance = PrismaClient;

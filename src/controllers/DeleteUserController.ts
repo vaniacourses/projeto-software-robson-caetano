@@ -2,13 +2,12 @@ import httpStatus from "http-status";
 import { z } from "zod";
 import { Request, Response } from "express";
 import { UserDAO } from "~/daos/UserDAO";
+import { UserRepository } from "~/repositories/user/UserRepository";
 
 export class DeleteUserController {
   private userDAO: UserDAO;
 
-  constructor() {
-    this.userDAO = new UserDAO();
-  }
+  constructor(private userRepository: UserRepository) {}
 
   async deleteUser(req: Request, res: Response) {
     try {

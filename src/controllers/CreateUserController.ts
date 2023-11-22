@@ -1,21 +1,19 @@
 import httpStatus from "http-status";
 import { z } from "zod";
 import { Request, Response } from "express";
-import { UserDAO } from "~/daos/UserDAO";
 import { UserSchema } from "~/schemas/user/createUserSchema";
+import { UserRepository } from "~/repositories/user/UserRepository";
 
 export class CreateUserController {
-  private userDAO: UserDAO;
-
-  constructor() {
-    this.userDAO = new UserDAO();
-  }
+  constructor(private userRepository: UserRepository) {}
 
   async createUser(req: Request, res: Response) {
     try {
       const parsedData = UserSchema.parse(req.body);
 
-      const existingUser = await this.userDAO.getByEmail(parsedData.email);
+      const existingUser = await this.userRepository.getByEmail(
+        parsedData.email,
+      );
 
       if (existingUser) {
         return res.status(httpStatus.CONFLICT).json({
@@ -23,7 +21,10 @@ export class CreateUserController {
         });
       }
 
-      const user = await this.userDAO.create(parsedData.name, parsedData.email);
+      const user = await this.userRepository.create(
+        parsedData.name,
+        parsedData.email,
+      );
 
       res.status(httpStatus.CREATED).json(user);
     } catch (error) {
