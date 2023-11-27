@@ -1,0 +1,18 @@
+@startuml
+agent "ERP hospitalar" as erp
+
+agent "CRUD de salas" as salas
+agent "CRUD de usuários" as usuarios
+agent "CRUD de produtos" as produtos
+agent "CRUD de pacientes" as pacientes
+agent "CRUD de consultas" as consultas
+agent "CRUD de cirurgias" as cirurgias
+
+erp --@ salas
+erp --0 pacientes
+erp --@ usuarios
+erp --@ produtos
+erp --0 consultas
+erp --0 cirurgias
+
+@enduml
