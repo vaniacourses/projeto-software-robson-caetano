@@ -1,3 +1,5 @@
+import "express-async-errors";
+
 import express from "express";
 import { router } from "./routes";
 import { env } from "./config/env";
