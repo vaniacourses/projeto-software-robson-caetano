@@ -1,9 +1,9 @@
 import { Router } from "express";
 import httpStatus from "http-status";
-import { CreateUserController } from "~/controllers/CreateUserController";
-import { DeleteUserController } from "~/controllers/DeleteUserController";
-import { ListUsersController } from "~/controllers/ListUsersController";
-import { UpdateUserController } from "~/controllers/UpdateUserController";
+import { CreateUserController } from "~/controllers/user/CreateUserController";
+import { DeleteUserController } from "~/controllers/user/DeleteUserController";
+import { ListUsersController } from "~/controllers/user/ListUsersController";
+import { UpdateUserController } from "~/controllers/user/UpdateUserController";
 import { DatabaseUserRepositoryStrategy } from "~/repositories/user/DatabaseUserRepositoryStrategy";
 import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 

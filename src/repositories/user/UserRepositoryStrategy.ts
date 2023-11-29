@@ -1,4 +1,4 @@
-import { User } from "~/models/user";
+import { User } from "@prisma/client";
 
 export interface UserRepositoryStrategy {
   getById(id: number): Promise<User | null>;
