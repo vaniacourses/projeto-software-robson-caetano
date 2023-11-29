@@ -1,12 +1,12 @@
 import { User } from "~/models/user";
-import { DatabaseClient, DatabaseInstance } from "~/config/database";
-import { UserRepository } from "./UserRepository";
+import { PrismaClient, PrismaSingleton } from "~/config/database";
+import { UserRepositoryStrategy } from "./UserRepositoryStrategy";
 
-export class DatabaseUserRepository implements UserRepository {
-  private db: DatabaseInstance = DatabaseClient.getClient();
+export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
+  private db: PrismaClient;
 
   constructor() {
-    this.db = DatabaseClient.getClient();
+    this.db = PrismaSingleton.getInstance();
   }
 
   public async getById(id: number): Promise<User | null> {

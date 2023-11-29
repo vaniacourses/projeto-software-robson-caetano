@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 
-export class DatabaseClient {
+export class PrismaSingleton {
   private static client: PrismaClient | null = null;
 
   private constructor() {}
 
-  static getClient(): PrismaClient {
+  static getInstance(): PrismaClient {
     if (!this.client) {
       this.client = new PrismaClient();
     }
@@ -14,4 +14,4 @@ export class DatabaseClient {
   }
 }
 
-export type DatabaseInstance = PrismaClient;
+export type { PrismaClient };

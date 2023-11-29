@@ -1,7 +1,7 @@
-import { UserRepository } from "~/repositories/user/UserRepository";
+import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 export class ListUsersController {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepositoryStrategy) {}
 
   async listUsers() {
     const users = await this.userRepository.list();

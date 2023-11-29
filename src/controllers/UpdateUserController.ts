@@ -1,5 +1,5 @@
-import { UserRepository } from "~/repositories/user/UserRepository";
 import { NotFoundError } from "~/errors/NotFoundError";
+import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 interface Params {
   id: number;
@@ -8,7 +8,7 @@ interface Params {
 }
 
 export class UpdateUserController {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepositoryStrategy) {}
 
   async updateUser({ id, name, email }: Params) {
     let user = await this.userRepository.getById(id);

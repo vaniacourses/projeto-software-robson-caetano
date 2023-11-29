@@ -1,12 +1,12 @@
 import { NotFoundError } from "~/errors/NotFoundError";
-import { UserRepository } from "~/repositories/user/UserRepository";
+import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 interface Params {
   id: number;
 }
 
 export class DeleteUserController {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepositoryStrategy) {}
 
   async deleteUser({ id }: Params) {
     const user = await this.userRepository.getById(id);

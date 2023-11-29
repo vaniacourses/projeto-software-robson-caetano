@@ -1,5 +1,5 @@
 import { NotFoundError } from "~/errors/NotFoundError";
-import { UserRepository } from "~/repositories/user/UserRepository";
+import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 interface Params {
   name: string;
@@ -7,7 +7,7 @@ interface Params {
 }
 
 export class CreateUserController {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepositoryStrategy) {}
 
   async createUser({ name, email }: Params) {
     const existingUser = await this.userRepository.getByEmail(email);
