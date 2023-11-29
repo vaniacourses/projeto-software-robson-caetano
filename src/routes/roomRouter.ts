@@ -2,6 +2,7 @@ import { Router } from "express";
 import httpStatus from "http-status";
 
 import { CreateRoomController } from "~/controllers/room/CreateRoomController";
+import { DeleteRoomController } from "~/controllers/room/DeleteRoomController";
 import { ListRoomsController } from "~/controllers/room/ListRoomsController";
 import { UpdateRoomController } from "~/controllers/room/UpdateRoomController";
 import { DatabaseRoomRepositoryStrategy } from "~/repositories/room/DatabaseRoomRepositoryStrategy";
@@ -35,4 +36,14 @@ roomRouter.put("/:id", async (req, res) => {
   });
 
   res.json(room);
+});
+
+roomRouter.delete("/:id", async (req, res) => {
+  await new DeleteRoomController(
+    new DatabaseRoomRepositoryStrategy(),
+  ).deleteRoom({
+    id: Number(req.params.id),
+  });
+
+  res.sendStatus(httpStatus.NO_CONTENT);
 });
