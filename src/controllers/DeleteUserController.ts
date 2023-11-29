@@ -1,4 +1,4 @@
-import { NotFoundError } from "~/errors/NotFoundError";
+import { NotFoundError } from "~/errors/domain/NotFoundError";
 import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 interface Params {
