@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 
 import { CreateRoomController } from "~/controllers/room/CreateRoomController";
 import { ListRoomsController } from "~/controllers/room/ListRoomsController";
+import { UpdateRoomController } from "~/controllers/room/UpdateRoomController";
 import { DatabaseRoomRepositoryStrategy } from "~/repositories/room/DatabaseRoomRepositoryStrategy";
 
 export const roomRouter = Router();
@@ -23,4 +24,15 @@ roomRouter.post("/", async (req, res) => {
   });
 
   res.status(httpStatus.CREATED).json(room);
+});
+
+roomRouter.put("/:id", async (req, res) => {
+  const room = await new UpdateRoomController(
+    new DatabaseRoomRepositoryStrategy(),
+  ).updateRoom({
+    id: Number(req.params.id),
+    name: req.body.name,
+  });
+
+  res.json(room);
 });
