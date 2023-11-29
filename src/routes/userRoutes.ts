@@ -4,8 +4,8 @@ import { CreateUserController } from "~/controllers/CreateUserController";
 import { DeleteUserController } from "~/controllers/DeleteUserController";
 import { ListUsersController } from "~/controllers/ListUsersController";
 import { UpdateUserController } from "~/controllers/UpdateUserController";
-import { DatabaseUserRepository } from "~/repositories/user/DatabaseUserRepository";
-import { UserRepository } from "~/repositories/user/UserRepository";
+import { DatabaseUserRepositoryStrategy } from "~/repositories/user/DatabaseUserRepositoryStrategy";
+import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 export const userRouter = Router();
 
@@ -15,8 +15,8 @@ export const userRouter = Router();
 // - extrair a criação do controller para uma função factory
 // - extrair cada handler (rota) pra um arquivo handler separado: precisamos pensar em uma forma de manter type safety aqui usando o middleware de validação com zod
 
-function makeUserRepository(): UserRepository {
-  return new DatabaseUserRepository();
+function makeUserRepository(): UserRepositoryStrategy {
+  return new DatabaseUserRepositoryStrategy();
 }
 
 userRouter.get("/", async (_, res) => {

@@ -1,6 +1,6 @@
 import { User } from "~/models/user";
 
-export interface UserRepository {
+export interface UserRepositoryStrategy {
   getById(id: number): Promise<User | null>;
 
   getByEmail(email: string): Promise<User | null>;
