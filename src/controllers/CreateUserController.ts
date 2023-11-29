@@ -1,4 +1,4 @@
-import { NotFoundError } from "~/errors/NotFoundError";
+import { ConflictError } from "~/errors/domain/ConflictError";
 import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 
 interface Params {
@@ -13,7 +13,7 @@ export class CreateUserController {
     const existingUser = await this.userRepository.getByEmail(email);
 
     if (existingUser) {
-      throw new NotFoundError("Email já cadastrado");
+      throw new ConflictError("Email já cadastrado");
     }
 
     const user = await this.userRepository.create(name, email);
