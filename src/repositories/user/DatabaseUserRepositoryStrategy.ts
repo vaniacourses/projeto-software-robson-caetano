@@ -1,6 +1,6 @@
-import { User } from "~/models/user";
 import { PrismaClient, PrismaSingleton } from "~/config/database";
 import { UserRepositoryStrategy } from "./UserRepositoryStrategy";
+import { User } from "@prisma/client";
 
 export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
   private db: PrismaClient;
