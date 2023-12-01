@@ -15,6 +15,7 @@ model User {
   name         String
   email        String    @unique
   passwordHash String
+  role         Role      @default(STOCK_MANAGER)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   Session      Session[]
@@ -34,4 +35,11 @@ model Room {
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  SECRETARY
+  DOCTOR
+  STOCK_MANAGER
 }
