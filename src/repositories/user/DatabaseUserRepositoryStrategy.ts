@@ -17,8 +17,12 @@ export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
     return this.db.user.findUnique({ where: { email } });
   }
 
-  public async create(name: string, email: string): Promise<User> {
-    return this.db.user.create({ data: { name, email } });
+  public async create({
+    name,
+    email,
+    passwordHash,
+  }: Pick<User, "name" | "email" | "passwordHash">): Promise<User> {
+    return this.db.user.create({ data: { name, email, passwordHash } });
   }
 
   public async list(): Promise<User[]> {
