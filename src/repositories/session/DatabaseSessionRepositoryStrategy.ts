@@ -1,5 +1,5 @@
 import { PrismaClient, PrismaSingleton } from "~/config/database";
-import { Session } from "@prisma/client";
+import { Session, User } from "@prisma/client";
 import { SessionRepositoryStrategy } from "./SessionRepositoryStrategy";
 
 export class DatabaseSessionRepositoryStrategy
@@ -9,6 +9,19 @@ export class DatabaseSessionRepositoryStrategy
 
   constructor() {
     this.db = PrismaSingleton.getInstance();
+  }
+
+  async getByToken(token: string): Promise<(Session & { user: User }) | null> {
+    const session = await this.db.session.findUnique({
+      where: {
+        token,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return session;
   }
 
   async create(userId: number, token: string): Promise<Session> {
