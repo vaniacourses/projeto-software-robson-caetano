@@ -24,3 +24,22 @@ model Room {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Product {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  storage   Storage[]
+}
+
+model Storage {
+  id        Int      @id @default(autoincrement())
+  productId Int      @unique
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamento com a tabela Product
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
