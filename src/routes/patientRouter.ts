@@ -14,7 +14,7 @@ export const patientRouter = Router();
 const databasePatientRepositoryStrategy =
   new DatabasePatientRepositoryStrategy();
 
-patientRouter.use(authorizationMiddleware([Role.SECRETARY]));
+patientRouter.use(authorizationMiddleware([Role.SECRETARY, Role.DOCTOR]));
 
 patientRouter.get("/", async (_, res) => {
   const patients = await new ListPatientsController(
