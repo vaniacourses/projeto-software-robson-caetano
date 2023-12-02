@@ -13,43 +13,57 @@ export const roomRouter = Router();
 
 const databaseRoomRepositoryStrategy = new DatabaseRoomRepositoryStrategy();
 
-roomRouter.use(authorizationMiddleware([Role.ADMIN]));
+roomRouter.get(
+  "/",
+  authorizationMiddleware([Role.ADMIN, Role.STORAGE_MANAGER]),
+  async (_, res) => {
+    const rooms = await new ListRoomsController(
+      databaseRoomRepositoryStrategy,
+    ).listRooms();
 
-roomRouter.get("/", async (_, res) => {
-  const rooms = await new ListRoomsController(
-    databaseRoomRepositoryStrategy,
-  ).listRooms();
+    res.json(rooms);
+  },
+);
 
-  res.json(rooms);
-});
+roomRouter.post(
+  "/",
+  authorizationMiddleware([Role.ADMIN]),
+  async (req, res) => {
+    const room = await new CreateRoomController(
+      new DatabaseRoomRepositoryStrategy(),
+    ).createRoom({
+      name: req.body.name,
+    });
 
-roomRouter.post("/", async (req, res) => {
-  const room = await new CreateRoomController(
-    new DatabaseRoomRepositoryStrategy(),
-  ).createRoom({
-    name: req.body.name,
-  });
+    res.status(httpStatus.CREATED).json(room);
+  },
+);
 
-  res.status(httpStatus.CREATED).json(room);
-});
+roomRouter.put(
+  "/:id",
+  authorizationMiddleware([Role.ADMIN]),
+  async (req, res) => {
+    const room = await new UpdateRoomController(
+      new DatabaseRoomRepositoryStrategy(),
+    ).updateRoom({
+      id: Number(req.params.id),
+      name: req.body.name,
+    });
 
-roomRouter.put("/:id", async (req, res) => {
-  const room = await new UpdateRoomController(
-    new DatabaseRoomRepositoryStrategy(),
-  ).updateRoom({
-    id: Number(req.params.id),
-    name: req.body.name,
-  });
+    res.json(room);
+  },
+);
 
-  res.json(room);
-});
+roomRouter.delete(
+  "/:id",
+  authorizationMiddleware([Role.ADMIN]),
+  async (req, res) => {
+    await new DeleteRoomController(
+      new DatabaseRoomRepositoryStrategy(),
+    ).deleteRoom({
+      id: Number(req.params.id),
+    });
 
-roomRouter.delete("/:id", async (req, res) => {
-  await new DeleteRoomController(
-    new DatabaseRoomRepositoryStrategy(),
-  ).deleteRoom({
-    id: Number(req.params.id),
-  });
-
-  res.sendStatus(httpStatus.NO_CONTENT);
-});
+    res.sendStatus(httpStatus.NO_CONTENT);
+  },
+);
