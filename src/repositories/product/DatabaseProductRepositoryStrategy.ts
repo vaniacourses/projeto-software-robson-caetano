@@ -10,7 +10,7 @@ export class DatabaseProductRepositoryStrategy implements ProductRepositoryStrat
   }
 
   public async getById(id: number): Promise<Product | null> {
-    return this.db.product.findUnique({ where: { id }, include: { storage: true } });
+    return this.db.product.findUnique({ where: { id }, include: { storage: true, ProductDistribution: true } });
   }
 
   public async create(name: string): Promise<Product> {
@@ -18,7 +18,7 @@ export class DatabaseProductRepositoryStrategy implements ProductRepositoryStrat
   }
 
   public async list(): Promise<Product[]> {
-    return this.db.product.findMany({ include: { storage: true } });
+    return this.db.product.findMany({ include: { storage: true, ProductDistribution: true } });
   }
 
   public async update(id: number, name: string): Promise<Product> {
