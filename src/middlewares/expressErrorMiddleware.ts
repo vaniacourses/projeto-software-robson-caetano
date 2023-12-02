@@ -7,6 +7,8 @@ export function errorMiddleware(
   res: Response,
   _next: NextFunction,
 ) {
+  console.error(error);
+
   const httpError = HttpErrorFactory.create(error);
 
   return res.status(httpError.statusCode).json({
