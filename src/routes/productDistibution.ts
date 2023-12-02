@@ -2,7 +2,6 @@ import { Router, Request, Response } from "express";
 import httpStatus from "http-status";
 
 import { DatabaseRoomRepositoryStrategy } from "~/repositories/room/DatabaseRoomRepositoryStrategy";
-import { DatabaseUserRepositoryStrategy } from "~/repositories/user/DatabaseUserRepositoryStrategy";
 import { DatabaseProductRepositoryStrategy } from "~/repositories/product/DatabaseProductRepositoryStrategy";
 import { DatabaseStorageRepositoryStrategy } from "~/repositories/storage/DatabaseStorageRepositoryStrategy";
 import { CreateProductDistributionController } from "~/controllers/product_distribution/CreateProductDistributionController";
@@ -18,7 +17,6 @@ productDistributionRouter.post("/", async (req: Request, res: Response) => {
   const createProductDistributionController =
     new CreateProductDistributionController(
       new DatabaseRoomRepositoryStrategy(),
-      new DatabaseUserRepositoryStrategy(),
       new DatabaseProductRepositoryStrategy(),
       new DatabaseStorageRepositoryStrategy(),
       new DatabaseProductDistributionRepositoryStrategy(),
@@ -29,7 +27,6 @@ productDistributionRouter.post("/", async (req: Request, res: Response) => {
       roomId: Number(req.body.roomId),
       productId: Number(req.body.productId),
       quantity: Number(req.body.quantity),
-      distributedByUserId: Number(req.body.distributedByUserId),
     });
 
   res.status(httpStatus.CREATED).json(productDistribution);

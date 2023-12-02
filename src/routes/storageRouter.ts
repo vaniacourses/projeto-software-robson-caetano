@@ -32,6 +32,7 @@ storageRouter.post("/", async (req, res) => {
   res.status(httpStatus.CREATED).json(room);
 });
 
+// TODO: nao deveria receber o productId no path, e sim no body -> id no path geralmente é referente ao recurso que estamos editando
 storageRouter.put("/:productId", async (req, res) => {
   const room = await new UpdateProductQuantityOnStorageController(
     new DatabaseStorageRepositoryStrategy(),

@@ -10,11 +10,11 @@ export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
   }
 
   public async getById(id: number): Promise<User | null> {
-    return this.db.user.findUnique({ where: { id }, include: { ProductDistribution: true } });
+    return this.db.user.findUnique({ where: { id } });
   }
 
   public async getByEmail(email: string): Promise<User | null> {
-    return this.db.user.findUnique({ where: { email }, include: { ProductDistribution: true } });
+    return this.db.user.findUnique({ where: { email } });
   }
 
   public async create({
@@ -27,7 +27,7 @@ export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
   }
 
   public async list(): Promise<User[]> {
-    return this.db.user.findMany({ include: { ProductDistribution: true } });
+    return this.db.user.findMany();
   }
 
   public async update(id: number, name: string, email: string): Promise<User> {

@@ -11,15 +11,14 @@ datasource db {
 }
 
 model User {
-  id                  Int                   @id @default(autoincrement())
-  name                String
-  email               String                @unique
-  passwordHash        String
-  role                Role
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  Session             Session[]
-  ProductDistribution ProductDistribution[]
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Session      Session[]
 }
 
 model Session {
@@ -60,22 +59,18 @@ model Storage {
 }
 
 model ProductDistribution {
-  id                  Int      @id @default(autoincrement())
-  roomId              Int
-  productId           Int
-  quantity            Int
-  distributedByUserId Int
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  roomId    Int
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relacionamento com a tabela Room
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   // Relacionamento com a tabela Product
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  // Relacionamento com a tabela User
-  distributedByUser User @relation(fields: [distributedByUserId], references: [id])
 }
 
 model Patient {
