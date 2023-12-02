@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 
 export interface UserRepositoryStrategy {
   getById(id: number): Promise<User | null>;
@@ -14,4 +14,6 @@ export interface UserRepositoryStrategy {
   update(id: number, name: string, email: string): Promise<User>;
 
   delete(id: number): Promise<void>;
+
+  listByRole(role: Role): Promise<User[]>;
 }

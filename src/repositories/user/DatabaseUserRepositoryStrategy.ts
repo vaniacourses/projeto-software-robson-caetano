@@ -1,6 +1,6 @@
 import { PrismaClient, PrismaSingleton } from "~/config/database";
 import { UserRepositoryStrategy } from "./UserRepositoryStrategy";
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 
 export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
   private db: PrismaClient;
@@ -36,5 +36,9 @@ export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
 
   public async delete(id: number): Promise<void> {
     await this.db.user.delete({ where: { id } });
+  }
+
+  public async listByRole(role: Role): Promise<User[]> {
+    return this.db.user.findMany({ where: { role } });
   }
 }
