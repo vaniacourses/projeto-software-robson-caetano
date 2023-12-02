@@ -1,7 +1,7 @@
 import { AppointmentStatus } from "@prisma/client";
 import { NotFoundError } from "~/errors/domain/NotFoundError";
-import { UnprocessableEntityError } from "~/errors/domain/UnprocessableEntityError";
 import { AppointmentRepositoryStrategy } from "~/repositories/appointment/AppointmentRepositoryStrategy";
+import { AppointmentContext as AppointmentStateContext } from "~/states/appointment/AppointmentContext";
 
 interface Params {
   id: number;
@@ -17,41 +17,19 @@ export class UpdateAppointmentController {
     const appointment = await this.appointmentRepository.getById(id);
 
     if (!appointment) {
-      throw new NotFoundError("Consulta não encontrado");
+      throw new NotFoundError("Consulta não encontrada");
     }
 
-    const transition = allowedTransitions.find(
-      (transition) =>
-        transition.from === appointment.status && transition.to === status,
+    const appointmentStateContext = new AppointmentStateContext(
+      appointment.status,
     );
-
-    if (!transition) {
-      throw new UnprocessableEntityError(
-        "Não é possível alterar o status da consulta",
-      );
-    }
+    const newState = appointmentStateContext.transitionTo(status);
 
     const updatedAppointment = await this.appointmentRepository.update(
       id,
-      status,
+      newState.getStatus(),
     );
 
     return updatedAppointment;
   }
 }
-
-// TODO: Kayalla - use state pattern here
-const allowedTransitions = [
-  {
-    from: AppointmentStatus.SCHEDULED,
-    to: AppointmentStatus.ON_GOING,
-  },
-  {
-    from: AppointmentStatus.SCHEDULED,
-    to: AppointmentStatus.CANCELED,
-  },
-  {
-    from: AppointmentStatus.ON_GOING,
-    to: AppointmentStatus.DONE,
-  },
-];
