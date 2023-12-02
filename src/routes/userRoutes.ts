@@ -1,13 +1,17 @@
+import { Role } from "@prisma/client";
 import { Router } from "express";
 import httpStatus from "http-status";
 import { CreateUserController } from "~/controllers/user/CreateUserController";
 import { DeleteUserController } from "~/controllers/user/DeleteUserController";
 import { ListUsersController } from "~/controllers/user/ListUsersController";
 import { UpdateUserController } from "~/controllers/user/UpdateUserController";
+import { authorizationMiddleware } from "~/middlewares/authorizationMiddleware";
 import { DatabaseUserRepositoryStrategy } from "~/repositories/user/DatabaseUserRepositoryStrategy";
 import { BcryptHasherStrategy } from "~/services/password-hasher/BCryptPasswordHasherStrategy";
 
 export const userRouter = Router();
+
+// userRouter.use(authorizationMiddleware([Role.ADMIN]));
 
 userRouter.get("/", async (_, res) => {
   const users = await new ListUsersController(

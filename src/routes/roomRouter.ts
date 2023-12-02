@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 import { Router } from "express";
 import httpStatus from "http-status";
 
@@ -5,13 +6,18 @@ import { CreateRoomController } from "~/controllers/room/CreateRoomController";
 import { DeleteRoomController } from "~/controllers/room/DeleteRoomController";
 import { ListRoomsController } from "~/controllers/room/ListRoomsController";
 import { UpdateRoomController } from "~/controllers/room/UpdateRoomController";
+import { authorizationMiddleware } from "~/middlewares/authorizationMiddleware";
 import { DatabaseRoomRepositoryStrategy } from "~/repositories/room/DatabaseRoomRepositoryStrategy";
 
 export const roomRouter = Router();
 
+const databaseRoomRepositoryStrategy = new DatabaseRoomRepositoryStrategy();
+
+roomRouter.use(authorizationMiddleware([Role.ADMIN]));
+
 roomRouter.get("/", async (_, res) => {
   const rooms = await new ListRoomsController(
-    new DatabaseRoomRepositoryStrategy(),
+    databaseRoomRepositoryStrategy,
   ).listRooms();
 
   res.json(rooms);

@@ -31,7 +31,7 @@ export class CreateSessionController {
     );
 
     if (!passwordValid) {
-      throw new NotFoundError("Usuário não encontrado");
+      throw new NotFoundError("Senha inválida");
     }
 
     const token = await this.tokenGenerator.generateToken();
