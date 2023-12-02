@@ -24,9 +24,13 @@ export class DatabaseAppointmentRepositoryStrategy
   public async create({
     patientId,
     doctorId,
-  }: Pick<Appointment, "doctorId" | "patientId">): Promise<Appointment> {
+    status,
+  }: Pick<
+    Appointment,
+    "doctorId" | "patientId" | "status"
+  >): Promise<Appointment> {
     return this.db.appointment.create({
-      data: { status: AppointmentStatus.SCHEDULED, patientId, doctorId },
+      data: { status, patientId, doctorId },
     });
   }
 
