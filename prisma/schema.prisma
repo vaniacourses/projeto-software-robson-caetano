@@ -11,14 +11,15 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
-  email        String    @unique
+  email        String        @unique
   passwordHash String
   role         Role
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   Session      Session[]
+  Appointment  Appointment[]
 }
 
 model Session {
@@ -74,10 +75,21 @@ model ProductDistribution {
 }
 
 model Patient {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String
-  cpf   String @unique
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String
+  cpf         String        @unique
+  Appointment Appointment[]
+}
+
+model Appointment {
+  id        Int               @id @default(autoincrement())
+  status    AppointmentStatus
+  patientId Int
+  doctorId  Int
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor  User    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -85,4 +97,10 @@ enum Role {
   SECRETARY
   DOCTOR
   STORAGE_MANAGER
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  ON_GOING
+  DONE
 }
