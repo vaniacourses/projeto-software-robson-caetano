@@ -78,6 +78,13 @@ model ProductDistribution {
   distributedByUser User @relation(fields: [distributedByUserId], references: [id])
 }
 
+model Patient {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String
+  cpf   String @unique
+}
+
 enum Role {
   ADMIN
   SECRETARY
