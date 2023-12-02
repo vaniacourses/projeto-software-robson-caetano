@@ -2,6 +2,8 @@ import { Role } from "@prisma/client";
 import { Router } from "express";
 import httpStatus from "http-status";
 import { CreatePatientController } from "~/controllers/patient/CreatePatientController";
+import { DeletePatientController } from "~/controllers/patient/DeletePatientController";
+import { ListPatientsController } from "~/controllers/patient/ListPatientsController";
 import { UpdatePatientController } from "~/controllers/patient/UpdatePatientController";
 
 import { authorizationMiddleware } from "~/middlewares/authorizationMiddleware";
@@ -15,7 +17,9 @@ const databasePatientRepositoryStrategy =
 patientRouter.use(authorizationMiddleware([Role.SECRETARY]));
 
 patientRouter.get("/", async (_, res) => {
-  const patients = await databasePatientRepositoryStrategy.list();
+  const patients = await new ListPatientsController(
+    databasePatientRepositoryStrategy,
+  ).listPatients();
 
   res.status(httpStatus.OK).json(patients);
 });
@@ -45,7 +49,11 @@ patientRouter.put("/:id", async (req, res) => {
 });
 
 patientRouter.delete("/:id", async (req, res) => {
-  await databasePatientRepositoryStrategy.delete(Number(req.params.id));
+  await new DeletePatientController(
+    databasePatientRepositoryStrategy,
+  ).deletePatient({
+    id: Number(req.params.id),
+  });
 
   res.status(httpStatus.NO_CONTENT).send();
 });
