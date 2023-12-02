@@ -11,14 +11,15 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  name         String
-  email        String    @unique
-  passwordHash String
-  role         Role
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  Session      Session[]
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  email               String                @unique
+  passwordHash        String
+  role                Role
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  Session             Session[]
+  ProductDistribution ProductDistribution[]
 }
 
 model Session {
@@ -31,10 +32,50 @@ model Session {
 }
 
 model Room {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  ProductDistribution ProductDistribution[]
+}
+
+model Product {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  storage             Storage[]
+  ProductDistribution ProductDistribution[]
+}
+
+model Storage {
   id        Int      @id @default(autoincrement())
-  name      String   @unique
+  productId Int      @unique
+  quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relacionamento com a tabela Product
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductDistribution {
+  id                  Int      @id @default(autoincrement())
+  roomId              Int
+  productId           Int
+  quantity            Int
+  distributedByUserId Int
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relacionamento com a tabela Room
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  // Relacionamento com a tabela Product
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Relacionamento com a tabela User
+  distributedByUser User @relation(fields: [distributedByUserId], references: [id])
 }
 
 enum Role {

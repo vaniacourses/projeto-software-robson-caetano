@@ -3,6 +3,7 @@ import { ConflictError } from "~/errors/domain/ConflictError";
 import { NotFoundError } from "~/errors/domain/NotFoundError";
 import { HttpError } from "./HttpError";
 import { UnauthorizedError } from "../domain/UnauthorizedError";
+import { UnprocessableEntityError } from "../domain/UnprocessableEntityError";
 
 export class HttpErrorFactory {
   public static create(error: Error) {
@@ -16,6 +17,10 @@ export class HttpErrorFactory {
 
     if (error instanceof UnauthorizedError) {
       return new HttpError(error.message, httpStatus.UNAUTHORIZED);
+    }
+
+    if (error instanceof UnprocessableEntityError) {
+      return new HttpError(error.message, httpStatus.UNPROCESSABLE_ENTITY);
     }
 
     return new HttpError(error.message, httpStatus.INTERNAL_SERVER_ERROR);
