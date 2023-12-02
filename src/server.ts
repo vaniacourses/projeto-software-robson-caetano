@@ -9,6 +9,10 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/health", (_, res) => {
+  res.send("OK");
+});
+
 app.use(router);
 
 app.use(errorMiddleware);
