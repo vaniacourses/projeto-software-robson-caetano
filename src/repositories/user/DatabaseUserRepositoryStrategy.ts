@@ -21,8 +21,9 @@ export class DatabaseUserRepositoryStrategy implements UserRepositoryStrategy {
     name,
     email,
     passwordHash,
-  }: Pick<User, "name" | "email" | "passwordHash">): Promise<User> {
-    return this.db.user.create({ data: { name, email, passwordHash } });
+    role,
+  }: Pick<User, "name" | "email" | "passwordHash" | "role">): Promise<User> {
+    return this.db.user.create({ data: { name, email, passwordHash, role } });
   }
 
   public async list(): Promise<User[]> {

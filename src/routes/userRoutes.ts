@@ -11,7 +11,7 @@ import { BcryptHasherStrategy } from "~/services/password-hasher/BCryptPasswordH
 
 export const userRouter = Router();
 
-// userRouter.use(authorizationMiddleware([Role.ADMIN]));
+userRouter.use(authorizationMiddleware([Role.ADMIN]));
 
 userRouter.get("/", async (_, res) => {
   const users = await new ListUsersController(
@@ -31,6 +31,7 @@ userRouter.post("/", async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
+    role: req.body.role,
   });
 
   res.status(httpStatus.CREATED).json(user);

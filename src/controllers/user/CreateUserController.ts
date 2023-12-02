@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 import { ConflictError } from "~/errors/domain/ConflictError";
 import { UserRepositoryStrategy } from "~/repositories/user/UserRepositoryStrategy";
 import { PasswordHasherStrategy } from "~/services/password-hasher/PasswordHasherStrategy";
@@ -6,6 +7,7 @@ interface Params {
   name: string;
   email: string;
   password: string;
+  role: Role;
 }
 
 export class CreateUserController {
@@ -14,7 +16,7 @@ export class CreateUserController {
     private passwordHasherStrategy: PasswordHasherStrategy,
   ) {}
 
-  async createUser({ name, email, password }: Params) {
+  async createUser({ name, email, password, role }: Params) {
     const existingUser = await this.userRepository.getByEmail(email);
 
     if (existingUser) {
@@ -27,6 +29,7 @@ export class CreateUserController {
       name,
       email,
       passwordHash,
+      role,
     });
 
     return user;

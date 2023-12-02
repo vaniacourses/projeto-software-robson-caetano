@@ -5,7 +5,9 @@ export interface UserRepositoryStrategy {
 
   getByEmail(email: string): Promise<User | null>;
 
-  create(data: Pick<User, "name" | "email" | "passwordHash">): Promise<User>;
+  create(
+    data: Pick<User, "name" | "email" | "passwordHash" | "role">,
+  ): Promise<User>;
 
   list(): Promise<User[]>;
 
