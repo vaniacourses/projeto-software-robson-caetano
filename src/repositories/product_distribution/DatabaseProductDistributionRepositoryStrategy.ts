@@ -34,5 +34,16 @@ export class DatabaseProductDistributionRepositoryStrategy
   public async delete(id: number): Promise<void> {
     await this.db.productDistribution.delete({ where: { id } });
   }
-}
 
+  public async findByRoomAndProduct({
+    productId,
+    roomId,
+  }: Pick<
+    ProductDistribution,
+    "roomId" | "productId"
+  >): Promise<ProductDistribution | null> {
+    return this.db.productDistribution.findFirst({
+      where: { productId, roomId },
+    });
+  }
+}

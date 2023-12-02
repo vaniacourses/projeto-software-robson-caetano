@@ -10,5 +10,8 @@ export interface ProductDistributionRepositoryStrategy {
   update(id: number, quantity: number): Promise<ProductDistribution>;
 
   delete(id: number): Promise<void>;
-}
 
+  findByRoomAndProduct(
+    data: Pick<ProductDistribution, "roomId" | "productId">,
+  ): Promise<ProductDistribution | null>;
+}
