@@ -35,7 +35,7 @@ model Room {
   name                String                @unique
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
-  ProductDistribution ProductDistribution[]
+  productDistribution ProductDistribution[]
 }
 
 model Product {

@@ -10,7 +10,16 @@ export class DatabaseRoomRepositoryStrategy implements RoomRepositoryStrategy {
   }
 
   public async getById(id: number): Promise<Room | null> {
-    return this.db.room.findUnique({ where: { id }, include: { ProductDistribution: true } });
+    return this.db.room.findUnique({
+      where: { id },
+      include: {
+        productDistribution: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
   }
 
   public async create(name: string): Promise<Room> {
@@ -18,7 +27,15 @@ export class DatabaseRoomRepositoryStrategy implements RoomRepositoryStrategy {
   }
 
   public async list(): Promise<Room[]> {
-    return this.db.room.findMany({ include: { ProductDistribution: true } });
+    return this.db.room.findMany({
+      include: {
+        productDistribution: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
   }
 
   public async update(id: number, name: string): Promise<Room> {

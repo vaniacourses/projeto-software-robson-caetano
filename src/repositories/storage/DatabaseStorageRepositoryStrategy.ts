@@ -2,7 +2,9 @@ import { PrismaClient, PrismaSingleton } from "~/config/database";
 import { StorageRepositoryStrategy } from "./StorageRepositoryStrategy";
 import { Storage } from "@prisma/client";
 
-export class DatabaseStorageRepositoryStrategy implements StorageRepositoryStrategy {
+export class DatabaseStorageRepositoryStrategy
+  implements StorageRepositoryStrategy
+{
   private db: PrismaClient;
 
   constructor() {
@@ -18,10 +20,13 @@ export class DatabaseStorageRepositoryStrategy implements StorageRepositoryStrat
   }
 
   public async list(): Promise<Storage[]> {
-    return this.db.storage.findMany();
+    return this.db.storage.findMany({ include: { product: true } });
   }
 
-  public async updateByProductId(productId: number, quantity: number): Promise<Storage> {
+  public async updateByProductId(
+    productId: number,
+    quantity: number,
+  ): Promise<Storage> {
     return this.db.storage.update({ where: { productId }, data: { quantity } });
   }
 
