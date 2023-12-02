@@ -102,5 +102,6 @@ enum Role {
 enum AppointmentStatus {
   SCHEDULED
   ON_GOING
+  CANCELED
   DONE
 }
