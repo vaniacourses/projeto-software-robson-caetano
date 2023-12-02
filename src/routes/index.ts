@@ -5,6 +5,7 @@ import { sessionRouter } from "./sessionRoutes";
 import { productRouter } from "./productRouter";
 import { storageRouter } from "./storageRouter";
 import { productDistributionRouter } from "./productDistibution";
+import { patientRouter } from "./patientRouter";
 
 export const router = Router();
 
@@ -14,3 +15,4 @@ router.use("/sessions", sessionRouter);
 router.use("/storage", storageRouter);
 router.use("/products", productRouter);
 router.use("/product_distribution", productDistributionRouter);
+router.use("/patients", patientRouter);
