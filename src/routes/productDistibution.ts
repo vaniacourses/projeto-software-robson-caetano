@@ -8,26 +8,50 @@ import { CreateProductDistributionController } from "~/controllers/product_distr
 import { DatabaseProductDistributionRepositoryStrategy } from "~/repositories/product_distribution/DatabaseProductDistributionRepositoryStrategy";
 import { authorizationMiddleware } from "~/middlewares/authorizationMiddleware";
 import { Role } from "@prisma/client";
+import { ConsumeProductsOfRoomController } from "~/controllers/product_distribution/ConsumeProductOfRoomController";
 
 export const productDistributionRouter = Router();
 
-productDistributionRouter.use(authorizationMiddleware([Role.STORAGE_MANAGER]));
+const databaseProductDistributionRepository =
+  new DatabaseProductDistributionRepositoryStrategy();
 
-productDistributionRouter.post("/", async (req: Request, res: Response) => {
-  const createProductDistributionController =
-    new CreateProductDistributionController(
-      new DatabaseRoomRepositoryStrategy(),
-      new DatabaseProductRepositoryStrategy(),
-      new DatabaseStorageRepositoryStrategy(),
-      new DatabaseProductDistributionRepositoryStrategy(),
+productDistributionRouter.post(
+  "/",
+  authorizationMiddleware([Role.STORAGE_MANAGER]),
+  async (req: Request, res: Response) => {
+    const createProductDistributionController =
+      new CreateProductDistributionController(
+        new DatabaseRoomRepositoryStrategy(),
+        new DatabaseProductRepositoryStrategy(),
+        new DatabaseStorageRepositoryStrategy(),
+        databaseProductDistributionRepository,
+      );
+
+    const productDistribution =
+      await createProductDistributionController.createProductDistribution({
+        roomId: Number(req.body.roomId),
+        productId: Number(req.body.productId),
+        quantity: Number(req.body.quantity),
+      });
+
+    res.status(httpStatus.CREATED).json(productDistribution);
+  },
+);
+
+productDistributionRouter.put(
+  "/",
+  authorizationMiddleware([Role.DOCTOR]),
+  async (req: Request, res: Response) => {
+    const consumeProductsController = new ConsumeProductsOfRoomController(
+      databaseProductDistributionRepository,
     );
 
-  const productDistribution =
-    await createProductDistributionController.createProductDistribution({
+    await consumeProductsController.consumeProductsOfRoom({
       roomId: Number(req.body.roomId),
       productId: Number(req.body.productId),
       quantity: Number(req.body.quantity),
     });
 
-  res.status(httpStatus.CREATED).json(productDistribution);
-});
+    res.sendStatus(httpStatus.NO_CONTENT);
+  },
+);
