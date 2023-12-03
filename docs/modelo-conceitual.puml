@@ -1,68 +1,93 @@
 @startuml
 
-entity Administrador {
-  id: int {id}
-  nome: String
+title Modelo Conceitual
+
+class User {
+  name
+  email
+  passwordHash
+  role
+  createdAt
+  updatedAt
 }
 
-entity GerenteEstoque {
-  id: int {id}
-  nome: String
+class Session {
+  token
+  createdAt
+  updatedAt
 }
 
-entity Secretaria {
-  id: int {id}
-  nome: String
+class Room {
+  name
+  createdAt
+  updatedAt
 }
 
-entity Medico {
-  id: int {id}
-  nome: String
+class Product {
+  name
+  storage
+  createdAt
+  updatedAt
 }
 
-entity OperadoraPlanoDeSaude {
-  id: int {id}
-  nome: String
+class Storage {
+  quantity
+  createdAt
+  updatedAt
 }
 
-entity Produto {
-  id: int {id}
-  nome: String
-  quantidade
-  criadoPor
+class ProductDistribution {
+  quantity
+  createdAt
+  updatedAt
 }
 
-entity Consulta {
-  id: int {id}
-  horario
+class Patient {
+  name
+  email
+  cpf
+  createdAt
+  updatedAt
 }
 
-entity Sala {
-  id: int {id}
+class Appointment {
+  status
+  createdAt
+  updatedAt
 }
 
-entity Paciente {
-  id: int {id}
-  name: String
-  documento
-  dataNascimento
+enum Role {
+  ADMIN
+  SECRETARY
+  DOCTOR
+  STORAGE_MANAGER
 }
 
-Administrador -- "1..*" Administrador: cadastra
-Administrador -- "1..*" GerenteEstoque: cadastra
-Administrador -- "1..*" Secretaria: cadastra
-Administrador -- "1..*" Medico: cadastra
-Administrador -- "1..*" OperadoraPlanoDeSaude: cadastra
-Administrador -- "1..*" Sala: cadastra
-Secretaria -- "1..*" Paciente: cadastra
-Secretaria -- "1..*" Consulta: agenda
-Medico -- "1..*" Consulta: abre
-Medico -- "1..*" Consulta: fecha
-Medico -- "1..*" Produto: utiliza
-OperadoraPlanoDeSaude -- "1..*" Consulta: paga
-GerenteEstoque -- Produto: distribui
-GerenteEstoque -- "1..*" Produto: cadastra
-Paciente -- "1..*" Consulta
-Sala "1" -- "1" Consulta
+enum AppointmentStatus {
+  SCHEDULED
+  ON_GOING
+  CANCELED
+  DONE
+}
+
+User "1" -- "0.." Session: pertence a
+
+Room "1" -right- "0.." ProductDistribution: contém produtos
+
+ProductDistribution "0..*" -- "1" Product: distribuido em salas
+
+Product "0..*" -- "1" Storage: armazenado em
+
+Appointment "0..*" -- "1" Patient: participa
+
+Appointment "0..*" -- "1" User: atende a uma
+
+Appointment "1" -right- "0..*" Room: ocorre em
+
+note left of Appointment
+  somente usuários
+  com role médico
+  possuem appointments
+end note
 
 @enduml
