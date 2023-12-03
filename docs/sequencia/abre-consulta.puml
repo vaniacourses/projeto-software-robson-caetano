@@ -2,69 +2,52 @@
 skinparam participantPadding 20
 skinparam boxPadding 10
 
-title "Abre consulta" 
+title "Abre consulta"
 
 box #LightBlue
-participant "Medico" as M
-participant "Frontend" as F
-participant "Backend" as B
+participant "Api" as A
+participant "AppointmentRouter" as R
+participant "UpdateAppointmentController" as C
+participant "DatabaseAppointmentRepositoryStrategy" as RP
 database "Banco de Dados" as DB
-participant "Paciente" as P
 
-note left of M
-  O processo começa
-  quando o médico
-  começa uma consulta.
+A -> R: requisição put para alterar estado da consulta
+activate R
+R -> C: Chama updateAppointment
+activate C
+C -> RP: Solicita o appointment
+activate RP
+RP -> DB: busca appointment pelo id
+activate DB
+DB -> RP: retornar o appointment
+deactivate DB
+RP -> C: retornou o appointment
+deactivate RP
+
+alt Caso appointment exista
+
+    C -> RP: Faz update
+    activate RP
+    RP -> DB: Faz update
+    activate DB
+    DB -> RP: retornar o appointment atualizado
+    deactivate DB
+    RP -> C: retornou o appointment atualizado
+    deactivate RP
+end
+
+'Retorna resposta'
+C -> R: Retorna Resposta
+deactivate C
+R -> A: Retorna Resposta
+deactivate R
+
+note left of A
+    Requisição que virá
+    do front (View)
+    e baterá na rota
+    '/appointments'.
 end note
 
-M -> F: Acessa a tela de agenda
-activate F
-F -> B: Solicita consultas agendadas
-activate B
-B -> DB: Busca consultas agendadas para aquele dia
-activate DB
-DB --> B: Retorna consultas agendadas para aquele dia
-deactivate DB
-B --> F: Envia consultas agendadas
-deactivate B
-F --> M: Mostra lista de consultas agendadas naquele dia
-deactivate F
-M -> F: Seleciona a consulta do paciente que irá atender
-activate F
-F -> B: Solicita informações de cadastro e prontuário do Paciente
-activate B
-B -> DB: Busca dados do Paciente
-activate DB
-DB --> B: Retorna dados do Paciente
-deactivate DB
-B --> F: Envia dados do Paciente
-deactivate B
-F --> M: Mostra dados do Paciente
-deactivate F
-M -> P: Atende paciente
-activate P
-P --> M: Apresenta suas queixas ao Médico
-deactivate P
-M -> F: Registra dados importantes na Consulta
-activate F
-M -> F: Fecha consulta
-F -> B: Envia novos dados da Consulta
-activate B
-B -> DB: Persistência de dados
-activate DB
-DB --> B: Responde sucesso do cadastro
-deactivate DB
-B --> F: Informa sucesso ao salvar
-deactivate B
-F --> M: Mostra notificação de sucesso e mostra tela com agendamentos
-deactivate F
-
-M -> P: Finaliza consulta com o Paciente
-
-note left of M
-  A consulta é agora
-  finalizada e o paciente
-  é informado.
-end note
 
 @enduml
