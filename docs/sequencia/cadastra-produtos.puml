@@ -24,5 +24,9 @@ DB -> PRP: retornar o produto
 deactivate DB
 PRP -> C: retornou o produto
 deactivate PRP
+C -> R: Retorna Resposta
+deactivate C
+R -> A: Retorna Resposta
+deactivate R
 
 @enduml
