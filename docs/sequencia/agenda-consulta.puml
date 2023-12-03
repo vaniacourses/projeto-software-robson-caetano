@@ -2,7 +2,7 @@
 skinparam participantPadding 20
 skinparam boxPadding 10
 
-title "Agenda consulta com paciente" 
+title "Agenda consulta com paciente"
 
 box #LightBlue
 participant "Api" as A
@@ -10,6 +10,7 @@ participant "AppointmentRouter" as R
 participant "CreateAppointmentController" as C
 participant "UserRepositoryStrategy" as URP
 participant "PatientsRepositoryStrategy" as PRP
+participant "RoomRepositoryStrategy" as RRP
 participant "AppointmentRepositoryStrategy" as ARP
 database "Banco de Dados" as DB
 
@@ -38,14 +39,25 @@ alt se usuario existe e ROLE do usuario é médico
     deactivate PRP
 
     alt se encontrou paciente
-        C -> ARP: Cria a consulta
-        activate ARP
-        ARP -> DB: Cria a consulta
+        C -> RRP: Solicita sala
+        activate RRP
+        RRP -> DB: busca sala pelo id
         activate DB
-        DB -> ARP: retornar a consulta
+        DB -> RRP: retornar a sala
         deactivate DB
-        ARP -> C: retornou a consulta
-        deactivate ARP
+        RRP -> C: retornou a sala
+        deactivate RRP
+
+        alt se existe sala disponivel
+            C -> ARP: Cria a consulta
+            activate ARP
+            ARP -> DB: Cria a consulta
+            activate DB
+            DB -> ARP: retornar a consulta
+            deactivate DB
+            ARP -> C: retornou a consulta
+            deactivate ARP
+        end
     end
 end
 
