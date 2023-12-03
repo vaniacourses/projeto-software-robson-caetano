@@ -49,5 +49,9 @@ note left of A
     '/appointments'.
 end note
 
+note left of A
+    Diagrama feito partindo de que 
+    o status está como SCHEDULE
+end note
 
 @enduml
