@@ -5,38 +5,74 @@ skinparam boxPadding 10
 title "Distribui produto nas salas" 
 
 box #LightBlue
-participant "Gerente de estoque" as GE
-participant "Frontend" as F
-participant "Backend" as B
+participant "Api" as A
+participant "ProductDistributionRouter" as R
+participant "CreateProductDistributionController" as C
+participant "RoomRepositoryStrategy" as RRP
+participant "ProductRepositoryStrategy" as PRP
+participant "StorageRepositoryStrategy" as SRP
+participant "ProductDistributionRepositoryStrategy" as PDRP
 database "Banco de Dados" as DB
 
-note left of GE
-  O processo começa
-  ao solicitar lista de produtos
-  faltando na sala
-end note
+A -> R: requisição post para distribuir produto em sala
+activate R
+R -> C: Chama createProductDistribution
+activate C
 
-GE -> F: Clica no botão solicitando lista
-activate F
-F -> B: Solicita lista de produtos faltando
-activate B
-B -> DB: Busca produtos cadastrados na sala
+C -> RRP: Solicita o sala
+activate RRP
+RRP -> DB: busca sala pelo id
 activate DB
-DB --> B: Retorna produtos cadastrados na sala
+DB -> RRP: retornar o sala
 deactivate DB
-B -> DB: Busca produtos faltando no estoque
-activate DB
-DB --> B: Retorna produtos faltando no estoque
-deactivate DB
-B --> F: Envia lista de produtos faltando
-deactivate B
-F --> GE: Comunica lista de produtos faltando
-deactivate F
+RRP -> C: retornou o sala
+deactivate RRP
 
-note right of GE
-  Termina enviando uma lista
-  Informando os produtos que temos no estoque
-  E os produtos que não temos no estoque, mas precisamos
-end note
+alt se sala existe
+    C -> PRP: Solicita o produto
+    activate PRP
+    PRP -> DB: busca produto pelo id
+    activate DB
+    DB -> PRP: retornar o produto
+    deactivate DB
+    PRP -> C: retornou o produto
+    deactivate PRP
+
+    alt se encontrou produto
+        C -> SRP: Solicita quantidade do produto no estoque
+        activate SRP
+        SRP -> DB: busca quantidade do produto no estoque pelo id do produto
+        activate DB
+        DB -> SRP: retornar a quantidade do produto no estoque
+        deactivate DB
+        SRP -> C: retornar a quantidade do produto no estoque
+        deactivate SRP
+
+        alt se tem quantidade suficiente do produto no estoque
+          C -> PDRP: distribui produto na sala
+          activate PDRP
+          PDRP -> DB: Cria relacao na tabela productDistribution
+          activate DB
+          DB -> PDRP: retornar relacao
+          deactivate DB
+          PDRP -> C: retornou a relacao
+          deactivate PDRP
+
+          C -> SRP: Decrementa quantidade do produto no estoque
+          activate SRP
+          SRP -> DB: decrementa quantidade do produto no estoque pelo id do produto
+          activate DB
+          DB -> SRP: retornar a quantidade do produto no estoque atualizado
+          deactivate DB
+          SRP -> C: retornar a quantidade do produto no estoque atualizado
+          deactivate SRP
+      end
+    end
+end
+
+C -> R: Retorna Resposta
+deactivate C
+R -> A: Retorna Resposta
+deactivate R
 
 @enduml

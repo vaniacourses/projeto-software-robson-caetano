@@ -2,56 +2,78 @@
 skinparam participantPadding 20
 skinparam boxPadding 10
 
-title "Agenda consulta com paciente" 
+title "Agenda consulta com paciente"
 
 box #LightBlue
-participant "Secretaria" as S
-participant "Frontend" as F
-participant "Backend" as B
+participant "Api" as A
+participant "AppointmentRouter" as R
+participant "CreateAppointmentController" as C
+participant "UserRepositoryStrategy" as URP
+participant "PatientsRepositoryStrategy" as PRP
+participant "RoomRepositoryStrategy" as RRP
+participant "AppointmentRepositoryStrategy" as ARP
 database "Banco de Dados" as DB
-participant "Paciente" as P
 
-note left of S
-  O processo começa
-  quando a secretaria
-  decide agendar uma consulta.
+A -> R: requisição post para criar consulta
+activate R
+R -> C: Chama createAppointment
+activate C
+
+C -> URP: Solicita o usuario
+activate URP
+URP -> DB: busca usuario pelo id
+activate DB
+DB -> URP: retornar o usuario
+deactivate DB
+URP -> C: retornou o usuario
+deactivate URP
+
+alt se usuario existe e ROLE do usuario é médico
+    C -> PRP: Solicita o paciente
+    activate PRP
+    PRP -> DB: busca paciente pelo id
+    activate DB
+    DB -> PRP: retornar o paciente
+    deactivate DB
+    PRP -> C: retornou o paciente
+    deactivate PRP
+
+    alt se encontrou paciente
+        C -> RRP: Solicita sala
+        activate RRP
+        RRP -> DB: busca sala pelo id
+        activate DB
+        DB -> RRP: retornar a sala
+        deactivate DB
+        RRP -> C: retornou a sala
+        deactivate RRP
+
+        alt se existe sala disponivel
+            C -> ARP: Cria a consulta
+            activate ARP
+            ARP -> DB: Cria a consulta
+            activate DB
+            DB -> ARP: retornar a consulta
+            deactivate DB
+            ARP -> C: retornou a consulta
+            deactivate ARP
+        end
+    end
+end
+
+
+'Retorna resposta'
+C -> R: Retorna Resposta
+deactivate C
+R -> A: Retorna Resposta
+deactivate R
+
+note left of A
+    Requisição que virá
+    do front (View)
+    e baterá na rota
+    '/appointments'.
 end note
 
-S -> F: Acessa a tela de agendamento
-activate F
-F -> B: Solicita horários disponíveis
-activate B
-B -> DB: Busca horários disponíveis
-activate DB
-DB --> B: Retorna horários disponíveis
-deactivate DB
-B --> F: Envia horários disponíveis
-deactivate B
-F --> S: Mostra os horários disponíveis
-deactivate F
-S -> P: Pergunta ao paciente sobre sua disponibilidade
-activate P
-P --> S: Informa sua disponibilidade
-deactivate P
-S -> F: Escolhe um horário baseado na disponibilidade do paciente
-activate F
-F -> B: Solicita agendamento do horário escolhido
-activate B
-B -> DB: Registra agendamento
-activate DB
-DB --> B: Confirma registro do agendamento
-deactivate DB
-B --> F: Confirma agendamento ao frontend
-deactivate B
-F --> S: Mostra confirmação do agendamento
-deactivate F
-
-S --> P: Comunica confirmação do horário agendado
-
-note right of S
-  A consulta é agora
-  agendada e o paciente
-  é informado.
-end note
 
 @enduml
