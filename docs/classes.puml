@@ -1,76 +1,343 @@
 @startuml
 
-class Usuario {
-  + nome: String
-  - cargo: String
-  + fazerLogin(): void
+package Modelo {
+  class User {
+    + id: Int
+    + name: String
+    + email: String
+    + passwordHash: String
+    + role: Role
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class Session {
+    + id: Int
+    + token: String
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class Room {
+    + id: Int
+    + name: String
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class Product {
+    + id: Int
+    + name: String
+    + storage
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class Storage {
+    + id: Int
+    + quantity: Int
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class ProductDistribution {
+    + id: Int
+    + quantity: Int
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class Patient {
+    + id: Int
+    + name: String
+    + email: String
+    + cpf: String
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  class Appointment {
+    + id: Int
+    + status: AppointmentStatus
+    +  createdAt: Date
+    +  updatedAt: Date
+  }
+
+  enum Role {
+    ADMIN
+    SECRETARY
+    DOCTOR
+    STORAGE_MANAGER
+  }
+
+  enum AppointmentStatus {
+    SCHEDULED
+    ON_GOING
+    CANCELED
+    DONE
+  }
+
+  User "1" -- "0.." Session: pertence a
+
+  Room "1" -- "0.." ProductDistribution: contém produtos
+
+  ProductDistribution "0..*" -- "1" Product: distribuido em salas
+
+  Product "0..*" -- "1" Storage: armazenado em
+
+  Appointment "0..*" -- "1" Patient: participa
+
+  Appointment "0..*" -- "1" User: atende a uma
+
+  Appointment "1" -- "0..*" Room: ocorre em
 }
 
-class Produto {
-  - nome: String
-  - quantidade: int
-  - criadoPor: String
+package Repositories {
+  class DatabaseAppointmentRepositoryStrategy {
+  }
+
+  interface AppointmentRepositoryStrategy {
+    + getById(id: Int): Appointment;
+    + create(doctorId: Int, patientId: Int, status: AppointmentStatus): Appointment;
+    + list(): Appointment[];
+    + update(id: Int, status: AppointmentStatus): Appointment;
+    + delete(id: Int): Promise<void>;
+  }
+
+  DatabaseAppointmentRepositoryStrategy -[dashed]-> AppointmentRepositoryStrategy
+
+  class DatabasePatientRepositoryStrategy {
+  }
+
+  interface PatientRepositoryStrategy {
+    + getById(id: Int): Patient;
+    + getByCpf(cpf: String): Patient;
+    + create(data: PatientData): Patient;
+    + list(): Promise<Patient[]>;
+    + update(id: Int, data: Omit<PatientData, "cpf">): Patient;
+    + delete(id: Int): void;
+  }
+
+  DatabasePatientRepositoryStrategy -[dashed]-> PatientRepositoryStrategy
+
+  class DatabaseProductRepositoryStrategy {
+  }
+
+  interface ProductRepositoryStrategy {
+    + getById(id: Int): <Product;
+    + create(name: string): Product;
+    + list(): Product[];
+    + update(id: Int, name: string): Product;
+    + delete(id: Int): void;
+  }
+
+  DatabaseProductRepositoryStrategy -[dashed]-> ProductRepositoryStrategy
+
+  class DatabaseProductDistributionRepositoryStrategy {
+  }
+
+  interface ProductDistributionRepositoryStrategy {
+    create(roomId: Int, productId: Int, quantity: Int): ProductDistribution;
+    update(id: Int, quantity: Int): ProductDistribution;
+    delete(id: Int): void;
+    findByRoomAndProduct(roomId: Int, productId: Int): ProductDistribution;
+  }
+
+  DatabaseProductDistributionRepositoryStrategy -[dashed]-> ProductDistributionRepositoryStrategy
+
+  class DatabaseRoomRepositoryStrategy {
+  }
+
+  interface RoomRepositoryStrategy {
+    getById(id: Int): Room;
+    create(name: String): Room;
+    list(): Room[];
+    update(id: Int, name: String): Room;
+    delete(id: Int): void;
+  }
+
+  DatabaseRoomRepositoryStrategy -[dashed]-> RoomRepositoryStrategy
+
+  class DatabaseSessionRepositoryStrategy {
+  }
+
+  interface SessionRepositoryStrategy {
+    + create(userId: Int, token: String): Session;
+    + getByToken(token: String): Session;
+  }
+
+  DatabaseSessionRepositoryStrategy -[dashed]-> SessionRepositoryStrategy
+
+  class DatabaseStorageRepositoryStrategy {
+  }
+
+  interface StorageRepositoryStrategy {
+    + getByProductId(productId: Int): Storage;
+    + create(productId: Int, quantity: Int): Storage;
+    + list(): Storage[];
+    + updateByProductId(productId: Int, quantity: Int): Storage;
+    + deleteByProductId(productId: Int): void;
+  }
+
+  DatabaseStorageRepositoryStrategy -[dashed]-> StorageRepositoryStrategy
+
+  class DatabaseUserRepositoryStrategy {
+  }
+
+  interface UserRepositoryStrategy {
+    + getById(id: Int): User;
+    + getByEmail(email: string): User;
+    + create(name: String, email: String, passwordHash: String, role: Role): User;
+    + list(): User[];
+    + update(id: Int, name: String, email: String): User;
+    + delete(id: Int): void;
+    + listByRole(role: Role): User[];
+  }
+
+  DatabaseUserRepositoryStrategy -[dashed]-> UserRepositoryStrategy
 }
 
-class Consulta {
-  - numero: int
-  - horario: String
+class PrismaSchema {
+  + findUnique<T>(): T;
+  + findMany<T>(): T;
+  + create<T>(): T;
+  + update<T>(): T;
+  + delete<T>(): T;
 }
 
-class Sala {
-  - numero: int
+Repositories *-- PrismaSchema
+
+PrismaSchema *-- Modelo
+
+package Controllers {
+  class ListUsersController {
+    + listUsers(): User[];
+  }
+  class CreateUserController {
+    + createUser(...): User;
+  }
+  class DeleteUserController {
+    + deleteUser(id: Int): void;
+  }
+  class UpdateUserController {
+    + updateUser(id: Int, ...): User;
+  }
+  class ListRoomsController {
+    + listRooms(): Room[];
+  }
+  class DeleteRoomController {
+    + deleteRoom(id: Int): void;
+  }
+  class CreateRoomController {
+    + createRoom(...): Room;
+  }
+  class UpdateRoomController {
+    + updateRoom(id: Int, ...): Room;
+  }
+  class ListDoctorsController {
+    + listDoctors(): User[];
+  }
+  class ListProductsController {
+    + listProducts(): Product[];
+  }
+  class ListPatientsController {
+    + listPatients(): Patient[];
+  }
+  class DeleteProductController {
+    + deleteProduct(id: Int): void;
+  }
+  class UpdateProductController {
+    + updateProduct(id: Int, ...): Product;
+  }
+  class CreateProductController {
+    + createProduct(...): Product;
+  }
+  class DeletePatientController {
+    + deletePatient(id: Int): void;
+  }
+  class CreatePatientController {
+    + createPatient(...): Patient;
+  }
+  class UpdatePatientController {
+    + updatePatient(id: Int, ...): Patient;
+  }
+  class CreateSessionController {
+    + createSession(...): Session;
+  }
+  class ListAppointmentController {
+    + listAppointments(): Appointment[];
+  }
+  class AddProductToStorageController {
+    + addProductToStorage(...): Storage;
+  }
+  class UpdateAppointmentController {
+    + updateAppointment(id: Int, ...): Appointment;
+  }
+  class DeleteAppointmentController {
+    + deleteAppointment(id: Int): void;
+  }
+  class CreateAppointmentController {
+    + createAppointment(...): Appointment;
+  }
+  class ListProductsOnStorageController {
+    + listProductsOnStorage(): Storage[];
+  }
+  class DeleteProductFromStorageController {
+    + deleteProductFromStorage(id: Int): void;
+  }
+  class UpdateProductQuantityOnStorageController {
+    + updateProductQuantityOnStorage(id: Int, ...): Storage;
+  }
+  class ConsumeProductOfRoomController {
+    + consumeProductOfRoom(...): ProductDistribution;
+  }
+  class CreateProductDistributionController {
+    + createProductDistribution(...): ProductDistribution;
+  }
 }
 
-class Administrador {
-  + cadastrarUsuario(): void
-  + cadastrarSala(): void
+Controllers *-- Repositories
+
+package Services {
+  interface PasswordHasherStrategy {
+    + hash(password: String): String;
+    + compare(password: String, hash: String): Boolean;
+  }
+  class BCryptPasswordHasherStrategy {
+  }
+  BCryptPasswordHasherStrategy -[dashed]-> PasswordHasherStrategy
+
+  interface TokenGeneratorStrategy {
+    + generateToken(): String;
+  }
+  class CryptoTokenGeneratorStrategy {
+  }
+  CryptoTokenGeneratorStrategy -[dashed]-> TokenGeneratorStrategy
 }
 
-class GerenteEstoque {
-  + distribuirProdutos(): void
-  + cadastrarProduto(): void
-}
+Controllers *-- Services
 
-class Secretaria {
-  + cadastrarPaciente(): void
-  + agendarConsulta(): void
-}
+note right of Repositories
+  interfaces de repository
+  compoem os Controllers
+end note
 
-class Medico {
-  + abrirConsulta(): void
-  + fecharConsulta(): void
-  + utilizaProduto(produto, consulta): void
-}
+note right of Modelo
+  Classes do modelo
+  compoem
+  o PrismaSchema
+end note
 
-class OperadoraPlanoDeSaude {
-  + pagarConsulta(): void
-}
+note right of PrismaSchema
+  PrismaSchema compõe
+  todas classes de repository
+end note
 
-entity Paciente {
-  - numero: String
-  - name: String
-  - documento: String
-  - dataNascimento: String
-}
-
-Sistema "1" --* "1..*" Usuario: possui
-
-Usuario <|-- Administrador
-Usuario <|-- GerenteEstoque
-Usuario <|-- Secretaria
-Usuario <|-- Medico
-Usuario <|-- OperadoraPlanoDeSaude
-
-GerenteEstoque --|> Produto
-Sala "1" *-- "1..*" Produto: possui
-Medico --|> Produto
-
-Medico --> Consulta: usa
-OperadoraPlanoDeSaude --> Consulta: usa
-
-Administrador --> Sala: usa
-Secretaria --> Sala: usa
-
-Paciente "1" --* "1" Consulta
-
+note bottom of Services
+  classes de serviço
+  compoem
+  os controllers
+end note
+ 
 @enduml
+
