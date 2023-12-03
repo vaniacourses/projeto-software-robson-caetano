@@ -27,7 +27,7 @@ deactivate DB
 URP -> C: retornou o usuario
 deactivate URP
 
-alt se ROLE do usuario é médico
+alt se usuario existe e ROLE do usuario é médico
     C -> PRP: Solicita o paciente
     activate PRP
     PRP -> DB: busca paciente pelo id
