@@ -3,8 +3,7 @@ import { AppointmentRepositoryStrategy } from "./AppointmentRepositoryStrategy";
 import { Appointment, AppointmentStatus } from "@prisma/client";
 
 export class DatabaseAppointmentRepositoryStrategy
-  implements AppointmentRepositoryStrategy
-{
+  implements AppointmentRepositoryStrategy {
   private db: PrismaClient;
 
   constructor() {
@@ -17,6 +16,7 @@ export class DatabaseAppointmentRepositoryStrategy
       include: {
         doctor: true,
         patient: true,
+        room: true
       },
     });
   }
@@ -24,13 +24,14 @@ export class DatabaseAppointmentRepositoryStrategy
   public async create({
     patientId,
     doctorId,
+    roomId,
     status,
   }: Pick<
     Appointment,
-    "doctorId" | "patientId" | "status"
+    "doctorId" | "patientId" | "roomId" | "status"
   >): Promise<Appointment> {
     return this.db.appointment.create({
-      data: { status, patientId, doctorId },
+      data: { status, patientId, doctorId, roomId },
     });
   }
 
@@ -39,6 +40,7 @@ export class DatabaseAppointmentRepositoryStrategy
       include: {
         doctor: true,
         patient: true,
+        room: true
       },
     });
   }
