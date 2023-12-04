@@ -1,3 +1,4 @@
+
 @startuml
 skinparam participantPadding 20
 skinparam boxPadding 10
@@ -10,19 +11,24 @@ participant "Api" as A
 participant "ProductRouter" as R
 participant "CreateProductController" as C
 participant "ProductRepositoryStrategy" as PRP
+participant "PrismaSchema" as PS
 database "Banco de Dados" as DB
 
-A -> R: requisição post para criar produto
+A -> R: POST /products
 activate R
-R -> C: Chama createProduct
+R -> C: createProduct()
 activate C
-C -> PRP: Cria um produto
+C -> PRP: create()
 activate PRP
-PRP -> DB: Cria um produto
+PRP -> PS: create()
+activate PS
+PS -> DB: INSERT INTO ... VALUES ...
 activate DB
-DB -> PRP: retornar o produto
+DB -> PS: Retorna o produto
 deactivate DB
-PRP -> C: retornou o produto
+PS -> PRP: Retorna o produto
+deactivate PS
+PRP -> C: Retorna o produto
 deactivate PRP
 C -> R: Retorna Resposta
 deactivate C
