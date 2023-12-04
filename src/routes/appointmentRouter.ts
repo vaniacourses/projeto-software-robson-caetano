@@ -9,6 +9,7 @@ import { UpdateAppointmentController } from "~/controllers/appointment/UpdateApp
 import { authorizationMiddleware } from "~/middlewares/authorizationMiddleware";
 import { DatabaseAppointmentRepositoryStrategy } from "~/repositories/appointment/DatabaseAppointmentRepositoryStrategy";
 import { DatabasePatientRepositoryStrategy } from "~/repositories/patient/DatabasePatientRepositoryStrategy";
+import { DatabaseRoomRepositoryStrategy } from "~/repositories/room/DatabaseRoomRepositoryStrategy";
 import { DatabaseUserRepositoryStrategy } from "~/repositories/user/DatabaseUserRepositoryStrategy";
 
 export const appointmentRouter = Router();
@@ -16,6 +17,7 @@ export const appointmentRouter = Router();
 const dbUserRepository = new DatabaseUserRepositoryStrategy();
 const dbPatientsRepository = new DatabasePatientRepositoryStrategy();
 const dbAppointmentRepository = new DatabaseAppointmentRepositoryStrategy();
+const dbRoomRepostiory = new DatabaseRoomRepositoryStrategy()
 
 appointmentRouter.use(authorizationMiddleware([Role.SECRETARY, Role.DOCTOR]));
 
@@ -32,9 +34,11 @@ appointmentRouter.post("/", async (req, res) => {
     dbUserRepository,
     dbPatientsRepository,
     dbAppointmentRepository,
+    dbRoomRepostiory
   ).createAppointment({
     doctorId: req.body.doctorId,
     patientId: req.body.patientId,
+    roomId: req.body.roomId
   });
 
   res.status(httpStatus.CREATED).json(appointment);

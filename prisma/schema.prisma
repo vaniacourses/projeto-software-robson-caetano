@@ -37,6 +37,7 @@ model Room {
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
   productDistribution ProductDistribution[]
+  Appointment         Appointment[]
 }
 
 model Product {
@@ -87,9 +88,11 @@ model Appointment {
   status    AppointmentStatus
   patientId Int
   doctorId  Int
+  roomId    Int
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
   doctor  User    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  room    Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

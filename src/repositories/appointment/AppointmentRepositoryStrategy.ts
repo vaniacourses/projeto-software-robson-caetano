@@ -4,7 +4,7 @@ export interface AppointmentRepositoryStrategy {
   getById(id: number): Promise<Appointment | null>;
 
   create(
-    data: Pick<Appointment, "doctorId" | "patientId" | "status">,
+    data: Pick<Appointment, "doctorId" | "patientId" | "roomId" | "status">,
   ): Promise<Appointment>;
 
   list(): Promise<Appointment[]>;
