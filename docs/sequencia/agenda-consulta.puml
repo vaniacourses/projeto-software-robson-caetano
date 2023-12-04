@@ -12,50 +12,67 @@ participant "UserRepositoryStrategy" as URP
 participant "PatientsRepositoryStrategy" as PRP
 participant "RoomRepositoryStrategy" as RRP
 participant "AppointmentRepositoryStrategy" as ARP
+participant "PrismaSchema" as PS
 database "Banco de Dados" as DB
 
-A -> R: requisição post para criar consulta
+A -> R: POST /appointments
 activate R
-R -> C: Chama createAppointment
+R -> C: createAppointment()
 activate C
 
-C -> URP: Solicita o usuario
+C -> URP: getById()
 activate URP
-URP -> DB: busca usuario pelo id
+URP -> PS: findUnique()
+activate PS
+PS -> DB: SELECT ... FROM ... WHERE ...
 activate DB
-DB -> URP: retornar o usuario
+DB -> PS: Retorna o usuario
 deactivate DB
-URP -> C: retornou o usuario
+PS -> URP: Retorna o usuario
+deactivate PS
+URP -> C: Retorna o usuario
 deactivate URP
 
 alt se usuario existe e ROLE do usuario é médico
-    C -> PRP: Solicita o paciente
+    C -> PRP: getById()
     activate PRP
-    PRP -> DB: busca paciente pelo id
+    PRP -> PS: findUnique()
+    activate PS
+    PS -> DB: SELECT ... FROM ... WHERE ...
     activate DB
-    DB -> PRP: retornar o paciente
+    DB -> PS: Retorna o paciente
     deactivate DB
-    PRP -> C: retornou o paciente
+    PS -> PRP: Retorna o paciente
+    deactivate PS
+    PRP -> C: Retorna o paciente
     deactivate PRP
 
     alt se encontrou paciente
-        C -> RRP: Solicita sala
+        C -> RRP: getById()
         activate RRP
-        RRP -> DB: busca sala pelo id
+        RRP -> PS: findUnique()
+        activate PS
+        PS -> DB: SELECT ... FROM ... WHERE ...
         activate DB
-        DB -> RRP: retornar a sala
+        DB -> PS: Retorna a sala
         deactivate DB
-        RRP -> C: retornou a sala
+        PS -> RRP: Retorna a sala
+        deactivate PS
+        RRP -> C: Retorna a sala
         deactivate RRP
 
         alt se existe sala disponivel
-            C -> ARP: Cria a consulta
+            C -> ARP: create()
             activate ARP
-            ARP -> DB: Cria a consulta
+            ARP -> PS: create()
+            activate PS
+            PS -> DB: INSERT INTO ... VALUES ...
             activate DB
-            DB -> ARP: retornar a consulta
+            DB -> PS: Retorna a consulta
             deactivate DB
-            ARP -> C: retornou a consulta
+            PS -> ARP: Retorna a consulta
+            deactivate PS
+            ARP -> C: Retorna a consulta
             deactivate ARP
         end
     end
