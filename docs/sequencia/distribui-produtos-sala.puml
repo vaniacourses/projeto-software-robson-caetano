@@ -12,59 +12,80 @@ participant "RoomRepositoryStrategy" as RRP
 participant "ProductRepositoryStrategy" as PRP
 participant "StorageRepositoryStrategy" as SRP
 participant "ProductDistributionRepositoryStrategy" as PDRP
-database "Banco de Dados" as DB
+participant "PrismaSchema" as PS
+database "Database" as DB
 
-A -> R: requisição post para distribuir produto em sala
+A -> R: POST /product_distribution
 activate R
-R -> C: Chama createProductDistribution
+R -> C: createProductDistribution()
 activate C
 
-C -> RRP: Solicita o sala
+C -> RRP: getById()
 activate RRP
-RRP -> DB: busca sala pelo id
+RRP -> PS: findUnique()
+activate PS
+PS -> DB: SELECT ... FROM ... WHERE ...
 activate DB
-DB -> RRP: retornar o sala
+DB --> PS: Retorna sala
 deactivate DB
-RRP -> C: retornou o sala
+PS -> RRP: Retorna sala
+deactivate PS
+RRP -> C: Retorna sala
 deactivate RRP
 
 alt se sala existe
-    C -> PRP: Solicita o produto
+    C -> PRP: getById()
     activate PRP
-    PRP -> DB: busca produto pelo id
+    PRP -> PS: findUnique()
+    activate PS
+    PS -> DB: SELECT ... FROM ... WHERE ...
     activate DB
-    DB -> PRP: retornar o produto
+    DB --> PS: Retorna produto
     deactivate DB
-    PRP -> C: retornou o produto
+    PS -> PRP: Retorna produto
+    deactivate PS
+    PRP -> C: Retorna produto
     deactivate PRP
 
     alt se encontrou produto
-        C -> SRP: Solicita quantidade do produto no estoque
+        C -> SRP: getByProductId()
         activate SRP
-        SRP -> DB: busca quantidade do produto no estoque pelo id do produto
+        SRP -> PS: findUnique()
+        activate PS
+        PS -> DB: SELECT ... FROM ... WHERE ...
         activate DB
-        DB -> SRP: retornar a quantidade do produto no estoque
+        DB --> PS: Retorna quantidade do produto no estoque
         deactivate DB
-        SRP -> C: retornar a quantidade do produto no estoque
+        PS -> SRP: Retorna a quantidade do produto no estoque
+        deactivate PS
+        SRP -> C: Retorna a quantidade do produto no estoque
         deactivate SRP
 
         alt se tem quantidade suficiente do produto no estoque
-          C -> PDRP: distribui produto na sala
+          C -> PDRP: create()
           activate PDRP
-          PDRP -> DB: Cria relacao na tabela productDistribution
+          PDRP -> PS: create()
+          activate PS
+          PS -> DB: INSERT INTO ... VALUES ...
           activate DB
-          DB -> PDRP: retornar relacao
+          DB --> PS: Retorna a product distribution
           deactivate DB
-          PDRP -> C: retornou a relacao
+          PS -> PDRP: Retorna a product distribution
+          deactivate PS
+          PDRP -> C: Retorna a product distribution
           deactivate PDRP
 
-          C -> SRP: Decrementa quantidade do produto no estoque
+          C -> SRP: updateByProductId()
           activate SRP
-          SRP -> DB: decrementa quantidade do produto no estoque pelo id do produto
+          SRP -> PS: update()
+          activate PS
+          PS -> DB: UPDATE ... SET ... WHERE ...
           activate DB
-          DB -> SRP: retornar a quantidade do produto no estoque atualizado
+          DB --> PS: Retorna a product distribution atualizada
           deactivate DB
-          SRP -> C: retornar a quantidade do produto no estoque atualizado
+          PS -> SRP: Retorna a product distribution atualizada
+          deactivate PS
+          SRP -> C: Retorna a product distribution atualizada
           deactivate SRP
       end
     end
