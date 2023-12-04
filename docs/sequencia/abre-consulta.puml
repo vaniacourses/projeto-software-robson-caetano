@@ -9,30 +9,41 @@ participant "Api" as A
 participant "AppointmentRouter" as R
 participant "UpdateAppointmentController" as C
 participant "DatabaseAppointmentRepositoryStrategy" as RP
+participant "PrismaSchema" as PS
 database "Banco de Dados" as DB
 
-A -> R: requisição put para alterar estado da consulta
+A -> R: PUT /appointments/:id
 activate R
-R -> C: Chama updateAppointment
+R -> C: updateAppointment()
 activate C
-C -> RP: Solicita o appointment
+C -> RP: getById()
 activate RP
-RP -> DB: busca appointment pelo id
+RP -> PS: findUnique()
+activate PS
+PS -> DB: SELECT ... FROM ... WHERE ...
 activate DB
-DB -> RP: retornar o appointment
+DB -> PS: Retorna o appointment
 deactivate DB
-RP -> C: retornou o appointment
+PS -> RP: Retorna o appointment
+deactivate PS
+RP -> C: Retorna o appointment
 deactivate RP
 
 alt Caso appointment exista
-
-    C -> RP: Faz update
+    C -> RP: update()
     activate RP
-    RP -> DB: Faz update
+    RP -> PS: update()
+    activate PS
+    PS -> DB: UPDATE ... SET ... WHERE ...
     activate DB
-    DB -> RP: retornar o appointment atualizado
+    DB -> PS: Retorna o appointment atualizado
     deactivate DB
-    RP -> C: retornou o appointment atualizado
+    PS -> RP: Retorna o appointment atualizado
+    deactivate PS
+
+
+
+    RP -> C: Retorna o appointment atualizado
     deactivate RP
 end
 
