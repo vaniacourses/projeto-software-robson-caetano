@@ -1,5 +1,5 @@
 @startuml
-title Visão - Arquitetura Monolítica com Cliente/Servidor e Backend MVC
+title Visão Arquitetural
 
 package "Aplicação" {
   left to right direction

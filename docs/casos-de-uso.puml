@@ -1,5 +1,7 @@
 @startuml
 
+title "Casos de Uso"
+
 skinparam actorStyle awesome
 
 note as N1

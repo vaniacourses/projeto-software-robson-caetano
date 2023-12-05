@@ -1,5 +1,7 @@
 @startuml
 
+title "Diagrama de Classes"
+
 package Modelo {
   class User {
     + id: Int
