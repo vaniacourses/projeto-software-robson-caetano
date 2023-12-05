@@ -1,5 +1,4 @@
 @startuml
-
 title Visão - Arquitetura Monolítica com Cliente/Servidor e Backend MVC
 
 package "Aplicação" {
@@ -10,14 +9,21 @@ package "Aplicação" {
   }
 
   package "Servidor" {
-    [Backend MVC] as back
-
+    [Router] as r
+    [Controller] as c
+    [Repository] as rp
+    [Service] as s
+    [Middleware] as md
+    [PrismaSchema] as ps
     [Banco de dados] as db
   }
 
-  web --> back
-
-  back --> db
+  web --> r
+  r --> c
+  c --> rp
+  c --> s
+  r --> md
+  rp --> ps
+  ps --> db
 }
-
 @enduml
