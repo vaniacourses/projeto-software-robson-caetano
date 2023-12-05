@@ -2,6 +2,14 @@
 
 Trabalho de Projeto de Software
 
+## O que foi melhorado na segunda entrega
+
+- Descrição e impacto dos requisitos arquiteturais
+- Modelo conceitual
+- Diagrama de arquitetura
+- Diagramas de sequência
+- Diagrama de classes
+
 ## Documentações
 
 Todos diagramas foram feitos utilizando a linguagem PlantUML e estão na pasta `docs` neste projeto
